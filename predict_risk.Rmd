@@ -1,0 +1,90 @@
+---
+title: "Development, internal-external validation, and use of a prognostic model to predict future foot complications among people with diabetes recently discharged from hospital in Ontario, Canada"
+always_allow_html: true
+output:
+  github_document:
+    toc: true
+    toc_depth: 5
+  keep_text: true
+  pandoc_args: --webtex
+---
+
+## Overview
+  
+This file contains R code allowing users to:   
+1. Load the model objects for the Fine-Gray Regression and Random Survival Forest-Competing Risk models.
+2. Generate predictions for new test data.
+3. Assess model performance on the new test data.
+
+## Set-up 
+
+The following R libraries are used in this file, the code chunk below will a) check whether you already have them installed, b) install them for you if not already present, and c) load the packages into the session.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE
+)
+```
+
+```{r}
+library(riskRegression)
+library(randomForestSRC)
+library(rms)
+library(prodlim)
+
+## load model objects
+FGR <- readRDS("models/final_FGR_clean.rds")
+# RSF <-
+
+## FGR is a list with 7 items
+# crrFit = model fit obtained with riskRegression::FGR()
+# cause = 1 (status identifying event of interest = foot complication)
+names(model)
+
+## create new test data
+new_data <- data.frame(
+  age = 67,
+  sex_f = 1,
+  elective_adm = 1,
+  homelessness = 0,
+  peripheral_AD = 0,
+  coronary_AD = 1,
+  stroke = 0,
+  CHF = 0,
+  hypertension = 1,
+  COPD = 0,
+  CKD = 0,
+  malignancy = 0,
+  mental_illness = 0,
+  creatinine = 140.0,
+  Hb_A1C = 8.5,
+  albumin = 32.1,
+  Hb_A1C_missing = 0,
+  creatinine_missing = 0,
+  albumin_missing = 0
+)
+
+## add splines to data
+# derive splines based on knot locations
+age_splines <- rcs(new_data$age, model$params$age_knots)
+creatinine_splines <- rcs(new_data$creatinine, model$params$creatinine_knots)
+Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$params$hba1c_knots)
+albumin_splines <- rcs(new_data$albumin, model$params$albumin_knots)
+
+## add non-linear components to new_data
+new_data$age1 <- age_splines[, 2]
+new_data$age2 <- age_splines[, 3]
+new_data$creatinine1 <- creatinine_splines[, 2]
+new_data$creatinine2 <- creatinine_splines[, 3]
+new_data$Hb_A1C1 <- Hb_A1C_splines[, 2]
+new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
+new_data$albumin1 <- albumin_splines[, 2]
+
+# predicted risk at 1 year
+pred <- predict(model, newdata = new_data, times = 365.25)[1] # 0.0171758
+
+# to plot CIF, we need to extract predcted values at multiple time points
+time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
+p <- predict(model, newdata = new_data, times = time)
+plot(time, p, type = "l")
+```
