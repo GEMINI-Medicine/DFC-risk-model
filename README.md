@@ -14,7 +14,7 @@ The model building process was extensively validated in a nested internal-extern
 
 ## Data
 
-A dummy dataset can be found in the `data/`, which also contains a [data dictionary](/data/data_dictionary.csv) with definitions for all relevant predictor and outcome variables.
+A dummy dataset can be found in the `data/` folder, which also contains a [data dictionary](/data/data_dictionary.csv) with definitions for all relevant predictor and outcome variables.
 
 
 ## Generating predictions in R
