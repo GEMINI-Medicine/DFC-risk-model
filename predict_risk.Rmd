@@ -18,20 +18,24 @@ This file contains R code illustrating how to:
 
 ## Set-up 
 
-The following R libraries are used in this file, the code chunk below will a) check whether you already have them installed, b) install them for you if not already present, and c) load the packages into the session.
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE
 )
 ```
 
-```{r}
+The following R libraries are used in this file, the code chunk below will a) check whether you already have them installed, b) install them for you if not already present, and c) load the packages into the session.
+
+
+```{r warning = FALSE}
 library(riskRegression)
 library(randomForestSRC)
 library(rms)
 library(prodlim)
+```
+## Model objects
 
+```{r}
 ## load model objects
 FGR <- readRDS("models/final_FGR_clean.rds")
 # RSF <-
@@ -41,6 +45,17 @@ FGR <- readRDS("models/final_FGR_clean.rds")
 # cause = 1 (status identifying event of interest = foot complication)
 names(FGR)
 
+```
+
+## Dummy data
+
+```{r}
+
+```
+
+## Generate new predictions
+
+```{r}
 ## create new test data
 new_data <- data.frame(
   age = 67,
@@ -66,10 +81,10 @@ new_data <- data.frame(
 
 ## add splines to data
 # derive splines based on knot locations
-age_splines <- rcs(new_data$age, model$params$age_knots)
-creatinine_splines <- rcs(new_data$creatinine, model$params$creatinine_knots)
-Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$params$hba1c_knots)
-albumin_splines <- rcs(new_data$albumin, model$params$albumin_knots)
+age_splines <- rcs(new_data$age, FGR$splines$age_knots)
+creatinine_splines <- rcs(new_data$creatinine, FGR$splines$creatinine_knots)
+Hb_A1C_splines <- rcs(new_data$Hb_A1C, FGR$splines$hba1c_knots)
+albumin_splines <- rcs(new_data$albumin, FGR$splines$albumin_knots)
 
 ## add non-linear components to new_data
 new_data$age1 <- age_splines[, 2]
@@ -81,7 +96,7 @@ new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
 new_data$albumin1 <- albumin_splines[, 2]
 
 # predicted risk at 1 year
-pred <- predict(FGR, newdata = new_data, times = 365.25)[1] # 0.0171758
+predict(FGR, newdata = new_data, times = 365.25)[1] # 0.0171758
 
 # # to plot CIF, we need to extract predicted values at multiple time points
 # time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
