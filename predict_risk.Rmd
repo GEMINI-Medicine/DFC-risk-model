@@ -11,9 +11,9 @@ output:
 
 ## Overview
   
-This file contains R code allowing users to:   
+This file contains R code illustrating how to:   
 1. Load the model objects for the Fine-Gray Regression and Random Survival Forest-Competing Risk models.
-2. Generate predictions for new test data.
+2. Generate predictions on new test data.
 3. Assess model performance on the new test data.
 
 ## Set-up 
