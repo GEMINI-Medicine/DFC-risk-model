@@ -33,6 +33,7 @@ library(randomForestSRC)
 library(rms)
 library(prodlim)
 ```
+
 ## Model objects
 
 ```{r}
@@ -46,6 +47,17 @@ FGR <- readRDS("models/final_FGR_clean.rds")
 names(FGR)
 
 ```
+## Model parameters
+
+### FGR
+
+```{r}
+
+
+```
+
+### RSF-CR
+
 
 ## Dummy data
 
