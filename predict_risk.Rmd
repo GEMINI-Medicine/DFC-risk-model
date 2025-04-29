@@ -37,19 +37,17 @@ library(prodlim)
 
 ## Models
 
-
 The final models (trained on the whole cohort reported in Roberst & Loeffler et al.) are saved as .rds files in this repository and can be loaded as follows: 
 
 ```{r}
 ## load model objects
 FGR <- readRDS("models/final_FGR_clean.rds") # Fine-Gray Regression
 # RSFCR <-
-
 ```
 
 ### Fine-Gray Regression (FGR)
 
-The FGR model object contains the following items:
+The FGR model was optimized using `riskRgression::FGR()` (wrapper for `cmprsk::crr()` to ensure compatibility with `riskRgression::Score()` - see section below on obtaining model performance metrics). The FGR model object contains all relevant items returned by `riskRegression::FGR()`, including model coefficients (and bootstrapped SEs) as well as all knot locations for continuous predictors, which were modeled with restricted cubic splines using `rms::rcs()`:
 
 ```{r}
 names(FGR)
@@ -57,26 +55,40 @@ names(FGR)
 # call = original model call (note: variance was set to FALSE, SEs of coefficients were obtained using bootstrapping)
 # terms = model terms
 # form = model formula
-# cause = 1 (event of interest = 1 = foot complication)
+# cause = 1 (event of interest: 1 = foot complication)
 # coef = optimized model coefficients (SEs) and corresponding subdistribution hazard ratios (sHR)
 # splines = knot locations for restricted cubic splines for continuous predictors
 ```
 
 ### Random Survival Forest for Competing Risks (RSFCR)
 
-The RSFCR model object
+...
 
+## Generating predictions on new data
 
-## Dummy data
+The model objects can be used to generate predicted risk scores on new data (and subsequently evaluate model performance - see section below).
 
-```{r}
+**For more information on relevant predictor variables and how they are defined, please carefully review the data dictionary in `data/data_dictionary.csv`.**
+<details><summary>Expand this section to review the data dictionary</summary>
+
+```{r echo = FALSE}
+library(dplyr)
+library(kableExtra)
+
+data_dictionary <- read.csv("data/data_dictionary.csv")
+kable(data_dictionary) %>%
+  kable_styling(full_width = FALSE, font_size = 10) %>%
+  scroll_box(height = "300px", width = "100%")
 
 ```
 
-## Generate new predictions
+</details>
+<br>
+
+Let's create some new data from a single (hypothetical) patient:
 
 ```{r}
-## create new test data
+# create data for a single patient  
 new_data <- data.frame(
   age = 67,
   sex_f = 1,
@@ -98,15 +110,19 @@ new_data <- data.frame(
   creatinine_missing = 0,
   albumin_missing = 0
 )
+```
 
-## add splines to data
-# derive splines based on knot locations
+Crucially, for the FGR model, we additionally need to derive the non-linear components for each continuous predictor (age, hemoglobin A1C, creatinine, and albumin). We can use the knot locations stored in the `FGR` model object to achieve this:
+
+```{r}
+## this is only relevant for the FGR model
+# derive non-linear splines based on knot locations
 age_splines <- rcs(new_data$age, FGR$splines$age_knots)
 creatinine_splines <- rcs(new_data$creatinine, FGR$splines$creatinine_knots)
 Hb_A1C_splines <- rcs(new_data$Hb_A1C, FGR$splines$hba1c_knots)
 albumin_splines <- rcs(new_data$albumin, FGR$splines$albumin_knots)
 
-## add non-linear components to new_data
+# add non-linear components to new_data
 new_data$age1 <- age_splines[, 2]
 new_data$age2 <- age_splines[, 3]
 new_data$creatinine1 <- creatinine_splines[, 2]
@@ -114,12 +130,40 @@ new_data$creatinine2 <- creatinine_splines[, 3]
 new_data$Hb_A1C1 <- Hb_A1C_splines[, 2]
 new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
 new_data$albumin1 <- albumin_splines[, 2]
+```
 
-# predicted risk at 1 year
-predict(FGR, newdata = new_data, times = 365.25)[1] # 0.0171758
+We can now predict the risk of this patient for developing foot complications (cause = 1) within 1 year:
 
-# # to plot CIF, we need to extract predicted values at multiple time points
-# time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
-# p <- predict(model, newdata = new_data, times = time)
-# plot(time, p, type = "l")
+```{r, results='hide'}
+# predict risk of foot complication at 1 year
+risk_1_year <- predict(FGR, newdata = new_data, times = 365.25)[1]
+```
+
+```{r}
+print(risk_1_year)
+```
+
+Thus, our hypothetical patient has a risk of 1.72% of developing a diabetic foot complication within 1 year.
+
+We can also plot the cumulative incidence function (CIF) for this patient as follows:
+
+```{r, results='hide'}
+# to plot CIF, we need to extract predicted values at multiple time points
+time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
+p <- predict(FGR, newdata = new_data, times = time)
+```
+
+```{r}
+plot(time, p, type = "l")
+```
+
+## Testing model performance
+
+You can also use the model objects to evaluate model performance in a new cohort of patients (e.g., for external validation).
+
+We'll use some (randomly generated) dummy data here to illustrate how you can obtain AUROC and calibration metrics reported in Roberts & Loeffler et al. (in preparation):
+
+```{r}
+# generate random dummy data that (sort of)
+# load dummy data
 ```
