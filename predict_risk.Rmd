@@ -79,7 +79,6 @@ data_dictionary <- read.csv("data/data_dictionary.csv")
 kable(data_dictionary) %>%
   kable_styling(full_width = FALSE, font_size = 10) %>%
   scroll_box(height = "300px", width = "100%")
-
 ```
 
 </details>
