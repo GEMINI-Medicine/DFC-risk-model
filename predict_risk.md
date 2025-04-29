@@ -17,9 +17,10 @@ discharged from hospital in Ontario, Canada
 ## Overview
 
 This file contains R code illustrating how to:  
-1. Load the model objects for the Fine-Gray Regression and Random
-Survival Forest-Competing Risk models. 2. Generate predictions on new
-test data. 3. Assess model performance on the new test data.
+1. Obtain all relevant model information (parameters, coefficients etc.)
+from the model objects shared in this repository. 2. Use the model
+objects to generate predictions on new test data. 3. Assess model
+performance on the new test data.
 
 ## Set-up
 
@@ -28,28 +29,25 @@ will a) check whether you already have them installed, b) install them
 for you if not already present, and c) load the packages into the
 session.
 
-    ## riskRegression version 2023.12.21
-
-    ## 
-    ##  randomForestSRC 3.3.1 
-    ##  
-    ##  Type rfsrc.news() to see new features, changes, and bug fixes. 
-    ## 
-
-    ## Loading required package: Hmisc
-
-    ## 
-    ## Attaching package: 'Hmisc'
-
-    ## The following object is masked from 'package:randomForestSRC':
-    ## 
-    ##     impute
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     format.pval, units
+``` r
+library(riskRegression)
+library(randomForestSRC)
+library(rms)
+library(prodlim)
+```
 
 ## Model objects
+
+``` r
+## load model objects
+FGR <- readRDS("models/final_FGR_clean.rds")
+# RSF <-
+
+## FGR is a list with 7 items
+# crrFit = model fit obtained with riskRegression::FGR()
+# cause = 1 (status identifying event of interest = foot complication)
+names(FGR)
+```
 
     ## [1] "crrFit"  "terms"   "coef"    "splines" "form"    "call"    "cause"
 
@@ -63,6 +61,50 @@ session.
 
 ## Generate new predictions
 
+``` r
+## create new test data
+new_data <- data.frame(
+  age = 67,
+  sex_f = 1,
+  elective_adm = 1,
+  homelessness = 0,
+  peripheral_AD = 0,
+  coronary_AD = 1,
+  stroke = 0,
+  CHF = 0,
+  hypertension = 1,
+  COPD = 0,
+  CKD = 0,
+  malignancy = 0,
+  mental_illness = 0,
+  creatinine = 140.0,
+  Hb_A1C = 8.5,
+  albumin = 32.1,
+  Hb_A1C_missing = 0,
+  creatinine_missing = 0,
+  albumin_missing = 0
+)
+
+## add splines to data
+# derive splines based on knot locations
+age_splines <- rcs(new_data$age, FGR$splines$age_knots)
+creatinine_splines <- rcs(new_data$creatinine, FGR$splines$creatinine_knots)
+Hb_A1C_splines <- rcs(new_data$Hb_A1C, FGR$splines$hba1c_knots)
+albumin_splines <- rcs(new_data$albumin, FGR$splines$albumin_knots)
+
+## add non-linear components to new_data
+new_data$age1 <- age_splines[, 2]
+new_data$age2 <- age_splines[, 3]
+new_data$creatinine1 <- creatinine_splines[, 2]
+new_data$creatinine2 <- creatinine_splines[, 3]
+new_data$Hb_A1C1 <- Hb_A1C_splines[, 2]
+new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
+new_data$albumin1 <- albumin_splines[, 2]
+
+# predicted risk at 1 year
+predict(FGR, newdata = new_data, times = 365.25)[1] # 0.0171758
+```
+
     ##  [1] "age"                "sex_f"              "elective_adm"      
     ##  [4] "homelessness"       "peripheral_AD"      "coronary_AD"       
     ##  [7] "stroke"             "CHF"                "hypertension"      
@@ -74,3 +116,10 @@ session.
     ## [25] "Hb_A1C1"            "Hb_A1C2"
 
     ## [1] 0.0171758
+
+``` r
+# # to plot CIF, we need to extract predicted values at multiple time points
+# time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
+# p <- predict(model, newdata = new_data, times = time)
+# plot(time, p, type = "l")
+```
