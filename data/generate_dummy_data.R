@@ -29,13 +29,16 @@ dummy_data <- data.frame(
   mental_illness = as.logical(rbinom(n, size = 1, prob = 0.07)),
   creatinine = rnorm(n, mean = 80, sd = 15),
   Hb_A1C = rnorm(n, mean = 7.4, sd = 1.5),
-  albumin = rnorm(n, mean = 30, sd = 10)
+  albumin = rnorm(n, mean = 30, sd = 10),
+  Hb_A1C_missing = as.logical(rbinom(n, size = 1, prob = 0.6)),
+  creatinine_missing = as.logical(rbinom(n, size = 1, prob = 0.07)),
+  albumin_missing = as.logical(rbinom(n, size = 1, prob = 0.02))
 )
 
-# simulate missing lab data
-Hb_A1C_missing = 0,
-creatinine_missing = 0,
-albumin_missing = 0
+# for entries with missing lab data, set lab result to 0 (according to imputation method)
+dummy_data[Hb_A1C_missing == TRUE, ]$Hb_A1C <- 0
+dummy_data[creatinine_missing == TRUE, ]$creatinine <- 0
+dummy_data[albumin_missing == TRUE, ]$albumin <- 0
 
 attr(terms(form), "term.labels")
 
