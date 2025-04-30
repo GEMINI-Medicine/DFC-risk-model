@@ -1,27 +1,50 @@
 # diabetes-larp
-Diabetes foot complications: Risk prediction models
+Diabetes foot complications: Risk prediction model
+
 
 ## Overview
 
-This repository contains model objects, dummy data, and R code allowing users to generate predictions for the risk prediction models reported by Roberts & Loeffler et al. (in preparation). Briefly, the paper reports two models predicting the risk of diabetic foot complications (e.g., ulcers, gangrene, infections etc.) in hospitalized patients with diabetes who are discharged from General Internal Medicine (GIM). Two different types of prognostic models were developed and validated in an internal-external cross-validation framework:
+This repository contains detailed documentation about the Fine-Gray Regression (FGR) model reported in Roberts & Loeffler et al. (in preparation).
 
-1) [Fine-Gray Regression (FGR)](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144)
-2) [Random Survival Forest for Competing Risk (RSF-CR)](https://pubmed.ncbi.nlm.nih.gov/24728979/)
+The model predicts the risk of foot complications (e.g., ulcers, gangrene, infections etc.) in hospitalized patients with diabetes who are discharged from General Internal Medicine (GIM). 
 
-Both models are designed to estimate the cumulative incidence function (CIF) for diabetic foot complications while accounting for the competing risk of death. The Fine-Gray model is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF. In contrast, the RSF-CR model is an ensemble-based machine learning method that captures non-linear relationships and interactions without requiring strong modeling assumptions.
+Cross-validated model performance (discrimination and calibration) of the FGR model were highly comparable to a Random Survival Forest for Competing Risks (not included here because the model object requires patient-level time-to-event training data, which can't be shared publicly).   
 
-The model building process was extensively validated in a nested internal-external cross-validation approach to evaluate generalizability across different health institutions in Ontario. This repository contains the final models that were trained on the full cohort as described in Roberts & Loeffler et al. (in preparation). The Fine-Gray regression model is currently deployed at a single hospital, where patients' predicted risk of foot complications is calculated upon discharge, and patients with the highest risk scores are referred to chiropody clinics for specialized screening.
+This repository contains the final FGR model, which was trained on a total of 107,836 patients from 20 institutions in Ontario, Canada. The model is currently deployed at one hospital, where patients with the highest risk scores are referred to chiropody clinics after discharge from hospital.
 
-## Data
-
-A dummy dataset can be found in the `data/` folder, which also contains a [data dictionary](/data/data_dictionary.csv) with definitions for all relevant predictor and outcome variables.
+Here, we share the model object, dummy data, and R code allowing users to generate predictions on new data and validate model performance in a different cohort of patients.
 
 
-## Generating predictions in R
+## Fine-Gray Regression
 
-For a demo on how to generate risk predictions, please see [predict_risk.md](predict_risk.md)
+Briefly, the FGR model reported here estimates the cumulative incidence function (CIF) for diabetic foot complications while accounting for the competing risk of death.
 
-## Validating predictions
+FGR is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF ((Fine & Gray, 1997)[https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144]).
 
-If you want to check how well our models perform on a new test dataset, we recommend following the methods reported in [van Geloven et al., 2022](https://www.bmj.com/content/377/bmj-2021-069249). Example code can be found in the [survival-lumc repository](https://github.com/survival-lumc/ValidationCompRisks).
+Predictor variables were selected a priori and include patient-level characteristics like age, sex, admission urgency, comorbidities, homelessness, and lab results (see [here](/data/data_dictionary.csv) for a complete list).
 
+Restricted cubic splines were used to relax linearity assumptions for continuous predictors (age, hemoglobin A1C, creatinine, and albumin).
+The number of knots for each variable (max. 5) was treated as a hyperparameter and was selected based on a nested internal-external cross-validation approach.
+Knot locations for the optimized splines can be found in the model object (see `models/final_FGR_clean.rds`).
+
+
+## Repository Content
+
+1) **Model object**: 
+	- `models/final_FGR_clean.rds` contains the final FGR model including model formula, optimized coefficients, and spline knot locations
+2) **Data**:
+	- `data/data_dictionary.csv` provides a detailed overview of all predictor and outcome variables
+	- `data/dummy_data.rds` contains randomly generated dummy data that can be used for testing purposes
+	- Note: Due to patient privacy concerns, we are not able to share the original training data in this repository. A description of the cohort used for model training can be found in Roberts & Loeffler et al. (in preparation).
+3) **R demo code**
+	- [predict_risk.md](predict_risk.md) contains a brief demo illustrating how to load the model object, generate predictions on new data, and evaluate model performance. 
+
+
+## Reference
+
+Roberts & Loeffler et al. (in preparation). Development, internal-external validation, and use of a prognostic model to predict future foot complications among people with diabetes recently discharged from hospital in Ontario, Canada. 
+
+
+## Contact
+
+If you have any questions about the methods or data reported in this repository, please [open an issue](https://github.com/GEMINI-Medicine/diabetes-larp/issues) or contact Gemini.Data@unityhealth.to.
