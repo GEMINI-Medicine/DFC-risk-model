@@ -19,7 +19,7 @@ Here, we share the model object, dummy data, and R code allowing users to genera
 
 Briefly, the FGR model reported here estimates the cumulative incidence function (CIF) for diabetic foot complications while accounting for the competing risk of death.
 
-FGR is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF ((Fine & Gray, 1997)[https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144]).
+FGR is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF ([Fine & Gray, 1997](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144)).
 
 Predictor variables were selected a priori and include patient-level characteristics like age, sex, admission urgency, comorbidities, homelessness, and lab results (see [here](/data/data_dictionary.csv) for a complete list).
 

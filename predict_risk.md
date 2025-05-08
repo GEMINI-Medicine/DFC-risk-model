@@ -5,54 +5,57 @@ discharged from hospital in Ontario, Canada
 
 - <a href="#overview" id="toc-overview">Overview</a>
 - <a href="#set-up" id="toc-set-up">Set-up</a>
-- <a href="#models" id="toc-models">Models</a>
-  - <a href="#fine-gray-regression-fgr"
-    id="toc-fine-gray-regression-fgr">Fine-Gray Regression (FGR)</a>
-  - <a href="#random-survival-forest-for-competing-risks-rsfcr"
-    id="toc-random-survival-forest-for-competing-risks-rsfcr">Random
-    Survival Forest for Competing Risks (RSFCR)</a>
+- <a href="#fine-gray-regression-fgr-model"
+  id="toc-fine-gray-regression-fgr-model">Fine-Gray Regression (FGR)
+  Model</a>
 - <a href="#generating-predictions-on-new-data"
   id="toc-generating-predictions-on-new-data">Generating predictions on
   new data</a>
-- <a href="#testing-model-performance"
-  id="toc-testing-model-performance">Testing model performance</a>
+- <a href="#evaluating-model-performance"
+  id="toc-evaluating-model-performance">Evaluating model performance</a>
+  - <a href="#data-pre-processing" id="toc-data-pre-processing">Data
+    pre-processing</a>
+  - <a href="#performance-metrics" id="toc-performance-metrics">Performance
+    metrics</a>
+    - <a href="#auroc" id="toc-auroc">AUROC</a>
+    - <a href="#calibration" id="toc-calibration">Calibration</a>
 
-## Overview
+# Overview
 
 This file contains R code illustrating how to:
 
 1.  Obtain all relevant model information (coefficients, hyperparameters
-    etc.) from the model objects saved in this repository.
+    etc.) from the model object saved in this repository.
 2.  Use the model objects to generate predictions on new test data.
 3.  Assess model performance on the new test data.
 
-## Set-up
+# Set-up
 
 To run the code below, please install and load the following R
 libraries:
 
 ``` r
+library(data.table)
+library(dplyr)
 library(riskRegression)
 library(randomForestSRC)
 library(rms)
 library(prodlim)
+library(tableone)
+library(ggplot2)
 ```
 
-## Models
+# Fine-Gray Regression (FGR) Model
 
-The final models (trained on the whole cohort reported in Roberst &
-Loeffler et al.) are saved as .rds files in this repository and can be
+The final FGR model (trained on the whole cohort reported in Roberts &
+Loeffler et al.) is saved as an .rds file in this repository and can be
 loaded as follows:
 
 ``` r
-## load model objects
-FGR <- readRDS("models/final_FGR_clean.rds") # Fine-Gray Regression
-# RSFCR <-
+model <- readRDS("models/final_FGR_clean.rds")
 ```
 
-### Fine-Gray Regression (FGR)
-
-The FGR model was optimized using `riskRgression::FGR()` (wrapper for
+The model was optimized using `riskRgression::FGR()` (wrapper for
 `cmprsk::crr()` to ensure compatibility with `riskRgression::Score()` -
 see section below on obtaining model performance metrics). The FGR model
 object contains all relevant items returned by `riskRegression::FGR()`,
@@ -61,7 +64,7 @@ locations for continuous predictors, which were modeled with restricted
 cubic splines using `rms::rcs()`:
 
 ``` r
-names(FGR)
+names(model)
 ```
 
     ## [1] "crrFit"  "call"    "terms"   "form"    "cause"   "coef"    "splines"
@@ -76,13 +79,9 @@ names(FGR)
 # splines = knot locations for restricted cubic splines for continuous predictors
 ```
 
-### Random Survival Forest for Competing Risks (RSFCR)
+# Generating predictions on new data
 
-…
-
-## Generating predictions on new data
-
-The model objects can be used to generate predicted risk scores on new
+The model object can be used to generate predicted risk scores on new
 data (and subsequently evaluate model performance - see section below).
 
 **For more information on relevant predictor variables and how they are
@@ -572,18 +571,19 @@ new_data <- data.frame(
 )
 ```
 
-Crucially, for the FGR model, we additionally need to derive the
-non-linear components for each continuous predictor (age, hemoglobin
-A1C, creatinine, and albumin). We can use the knot locations stored in
-the `FGR` model object to achieve this:
+Crucially, for the FGR model, continuous variables (age, hemoglobin A1C,
+creatinine, and albumin) were modelled using restricted cubic splines.
+which we additionally need to derive the non-linear components for each
+continuous predictor . We can use the knot locations stored in the `FGR`
+model object to achieve this:
 
 ``` r
 ## this is only relevant for the FGR model
 # derive non-linear splines based on knot locations
-age_splines <- rcs(new_data$age, FGR$splines$age_knots)
-creatinine_splines <- rcs(new_data$creatinine, FGR$splines$creatinine_knots)
-Hb_A1C_splines <- rcs(new_data$Hb_A1C, FGR$splines$hba1c_knots)
-albumin_splines <- rcs(new_data$albumin, FGR$splines$albumin_knots)
+age_splines <- rcs(new_data$age, model$splines$age_knots)
+creatinine_splines <- rcs(new_data$creatinine, model$splines$creatinine_knots)
+Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$splines$hba1c_knots)
+albumin_splines <- rcs(new_data$albumin, model$splines$albumin_knots)
 
 # add non-linear components to new_data
 new_data$age1 <- age_splines[, 2]
@@ -600,7 +600,7 @@ complications (cause = 1) within 1 year:
 
 ``` r
 # predict risk of foot complication at 1 year
-risk_1_year <- predict(FGR, newdata = new_data, times = 365.25)[1]
+risk_1_year <- predict(model, newdata = new_data, times = 365.25)[1]
 ```
 
 ``` r
@@ -618,7 +618,7 @@ patient as follows:
 ``` r
 # to plot CIF, we need to extract predicted values at multiple time points
 time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
-p <- predict(FGR, newdata = new_data, times = time)
+p <- predict(model, newdata = new_data, times = time)
 ```
 
 ``` r
@@ -627,16 +627,349 @@ plot(time, p, type = "l")
 
 ![](predict_risk_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-## Testing model performance
+# Evaluating model performance
 
-You can also use the model objects to evaluate model performance in a
-new cohort of patients (e.g., for external validation).
+If you want to evaluate model performance on a new dataset, we recommend
+following the methods reported in [van Geloven et al.,
+2022](https://www.bmj.com/content/377/bmj-2021-069249). Detailed code
+examples can be found in the [survival-lumc
+repository](https://github.com/survival-lumc/ValidationCompRisks). Here,
+we just provide a brief summary of how to obtain AUROC and the
+calibration plot/metrics reported in Roberts & Loeffler et al. (in
+prep.)
 
 We’ll use some (randomly generated) dummy data here to illustrate how
 you can obtain AUROC and calibration metrics reported in Roberts &
 Loeffler et al. (in preparation):
 
 ``` r
-# generate random dummy data that (sort of)
-# load dummy data
+#dummy_data <- simulate_data(n = 10000, save_data = TRUE)
+dummy_data <- readRDS("data/dummy_data.rds")
 ```
+
+## Data pre-processing
+
+The characteristics of our dummy cohort are similar to the cohort
+reported by Roberts & Loeffler et al.:
+
+<details>
+<summary>
+Show code
+</summary>
+
+``` r
+tab1 <- CreateTableOne(vars = c("age",
+                                "sex_f",
+                                "elective_adm",
+                                "peripheral_AD",
+                                "coronary_AD",
+                                "stroke",
+                                "CHF",
+                                "hypertension",
+                                "COPD",
+                                "CKD",
+                                "malignancy",
+                                "mental_illness",
+                                "homelessness",
+                                "Hb_A1C",
+                                "creatinine",
+                                "albumin"
+), data = dummy_data)
+
+tab1 <- print(
+  tab1,
+  nonnormal = c("age", "Hb_A1C", "creatinine", "albumin"),
+  includeNA = TRUE,
+  showAllLevels = FALSE,
+  printToggle = FALSE
+)
+```
+
+</details>
+<table class="table" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Overall
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+n
+</td>
+<td style="text-align:left;">
+10000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age (median \[IQR\])
+</td>
+<td style="text-align:left;">
+69.56 \[59.92, 79.92\]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex_f = TRUE (%)
+</td>
+<td style="text-align:left;">
+4950 (49.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+elective_adm = TRUE (%)
+</td>
+<td style="text-align:left;">
+201 ( 2.0)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+peripheral_AD = TRUE (%)
+</td>
+<td style="text-align:left;">
+101 ( 1.0)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coronary_AD = TRUE (%)
+</td>
+<td style="text-align:left;">
+1231 (12.3)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stroke = TRUE (%)
+</td>
+<td style="text-align:left;">
+490 ( 4.9)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHF = TRUE (%)
+</td>
+<td style="text-align:left;">
+1293 (12.9)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hypertension = TRUE (%)
+</td>
+<td style="text-align:left;">
+4475 (44.8)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+COPD = TRUE (%)
+</td>
+<td style="text-align:left;">
+570 ( 5.7)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CKD = TRUE (%)
+</td>
+<td style="text-align:left;">
+388 ( 3.9)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+malignancy = TRUE (%)
+</td>
+<td style="text-align:left;">
+1098 (11.0)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mental_illness = TRUE (%)
+</td>
+<td style="text-align:left;">
+700 ( 7.0)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+homelessness = TRUE (%)
+</td>
+<td style="text-align:left;">
+52 ( 0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hb_A1C (median \[IQR\])
+</td>
+<td style="text-align:left;">
+7.69 \[6.60, 8.93\]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+creatinine (median \[IQR\])
+</td>
+<td style="text-align:left;">
+79.82 \[66.56, 93.13\]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+albumin (median \[IQR\])
+</td>
+<td style="text-align:left;">
+30.36 \[23.71, 36.85\]
+</td>
+</tr>
+</tbody>
+</table>
+
+Note that the lab results (Hb A1c, creatinine, and albumin) have missing
+values. To make sure we obtain valid model performance metrics, we use
+the same imputation method that was used to develop and validate the
+original model. Specifically, we create a new variable indicating
+missingness of lab values, and then set the corresponding test results
+to 0:
+
+``` r
+# create missing indicator flag
+dummy_data[, Hb_A1C_missing := ifelse(is.na(Hb_A1C), TRUE, FALSE)]
+dummy_data[, creatinine_missing := ifelse(is.na(creatinine), TRUE, FALSE)]
+dummy_data[, albumin_missing := ifelse(is.na(albumin), TRUE, FALSE)]
+
+# set missing test results to 0
+dummy_data[is.na(Hb_A1C), Hb_A1C := 0]
+dummy_data[is.na(creatinine), creatinine := 0]
+dummy_data[is.na(albumin), albumin := 0]
+```
+
+Additionally, we again need to add the non-linear components. Here, we
+are applying the same knot locations that were used in the validated
+model:
+
+``` r
+# add non-linear components to new_data
+age_splines <- rcs(dummy_data$age, model$splines$age_knots)
+creatinine_splines <- rcs(dummy_data$creatinine, model$splines$creatinine_knots)
+Hb_A1C_splines <- rcs(dummy_data$Hb_A1C, model$splines$hba1c_knots)
+albumin_splines <- rcs(dummy_data$albumin, model$splines$albumin_knots)
+
+dummy_data[, age1 := age_splines[, 2]]
+dummy_data[, age2 := age_splines[, 3]]
+dummy_data[, creatinine1 := creatinine_splines[, 2]]
+dummy_data[, creatinine2 := creatinine_splines[, 3]]
+dummy_data[, Hb_A1C1 := Hb_A1C_splines[, 2]]
+dummy_data[, Hb_A1C2 := Hb_A1C_splines[, 3]]
+dummy_data[, albumin1 := albumin_splines[, 2]]
+```
+
+## Performance metrics
+
+To obtain model performance metrics, we can use the
+`riskRegression::Score()` function:
+
+``` r
+t <- 365.25 # performance at 1 year
+
+score_result <- Score(
+  list(cr_model = model),
+  data = dummy_data,
+  formula = Hist(time, status) ~ 1,
+  cause = 1,
+  times = t,
+  metrics = c("auc"),
+  summary = c("risks", "ipa"),
+  plots = c("ROC", "calibration"),
+  conf.int = TRUE
+)
+```
+
+### AUROC
+
+To plot AUROC at 1 year, we can run `plotROC()` on the output returned
+by `Score()`:
+
+``` r
+plotROC(score_result,
+        times = 365.25,
+        ylab = paste0("Sensitivity at 1 year"),
+        xlab = paste0("1-Specificity at 1 year")
+)
+```
+
+![](predict_risk_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+### Calibration
+
+Similarly, we can create a calibration plot based on the output of
+`Score()` by running `plotCalibration()`:
+
+``` r
+# calibration plot
+plotCalibration(
+  score_result,
+  method = "nne", # default
+  cens.method = "jackknife",
+  round = FALSE,
+  xlim = c(0, 0.05),
+  ylim = c(0, 0.05),
+  rug = TRUE
+)
+```
+
+![](predict_risk_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+Note that `plotCalibration()` does not provide an option for loess
+smoothing of the calibration curves. However, we can easily create
+loess-smoothed curves with additional customization based on the data
+returned by `Score()`:
+
+``` r
+obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
+pred <- score_result$Calibration$plotframe[times == t]$risk
+
+# for plotting purposes, only include predicted scores within 99th percentile to ignore extreme/rare scores
+lim <- quantile(pred, 0.99)
+
+# get density of predicted values
+d <- density(pred)
+d_scaled <- lim - (d$y / max(d$y) * (lim / 4))
+density_data <- data.frame(x = d$x, y = d_scaled)
+
+# Use loess smoothing
+smooth_pseudos <- predict(
+  stats::loess(obs ~ pred, degree = 1, span = 2/3),
+  se = TRUE
+)
+
+CI_lower <- smooth_pseudos$fit - qt(0.975, smooth_pseudos$df) * smooth_pseudos$se
+CI_upper <- smooth_pseudos$fit + qt(0.975, smooth_pseudos$df) * smooth_pseudos$se 
+
+fig <- ggplot() +
+  geom_ribbon(aes(x = pred, y = obs, ymin = CI_lower, ymax = CI_upper), alpha = 0.3, fill = "darkblue") + 
+  geom_line(aes(x = pred, y = smooth_pseudos$fit), color = "darkblue") +
+  geom_abline(slope = 1, intercept = 0, color = "black", linetype = 2) +
+  geom_ribbon(data = density_data, aes(x = x, ymin = y, ymax = lim), alpha = 0.3) + 
+  geom_line(data = density_data, aes(x = x, y = y)) +
+  scale_x_continuous("Estimated risk at 1 year", expand = c(0, 0)) +
+  scale_y_continuous(paste0("Observed outcome proportions at 1 year"), expand = c(0, 0)) +
+  coord_cartesian(xlim = c(-0.001, lim), ylim = c(-0.001, lim)) +
+  theme_bw() +
+  theme(aspect.ratio = 1)
+
+print(fig)
+```
+
+![](predict_risk_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
