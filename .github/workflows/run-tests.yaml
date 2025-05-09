@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   test:
@@ -26,16 +26,10 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("remotes", repos = "https://cran.r-project.org")
-          remotes::install_deps(dependencies = c("Imports", "Depends")
-        shell: Rscript {0}
-        
-      - name: Set up R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: remotes
-          needs: testthat
+          remotes::install_deps(dependencies = c("Imports", "Depends"))
+        shell: Rscript -e {0}
 
       - name: Run unit tests
         run: |
           testthat::test_dir("tests")
-        shell: Rscript {0}
+        shell: Rscript -e {0}
