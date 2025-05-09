@@ -1,4 +1,8 @@
 # diabetes-larp
+<!-- badges: start -->
+[![Tests](https://github.com/GEMINI-Medicine/diabetes-larp/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/GEMINI-Medicine/diabetes-larp/actions/workflows/run-tests.yaml)
+<!-- badges: end -->
+
 Diabetes foot complications: Risk prediction model
 
 

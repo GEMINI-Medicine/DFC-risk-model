@@ -1,0 +1,25 @@
+Package: diabetes-larp
+Type: Project
+Title: Diabetes Foot Complications Risk Prediction
+Version: 0.0.0
+Author: Anne Loeffler
+Maintainer: GEMINIdata <Gemini.data@unityhealth.to>
+Description: .
+License: MIT + file LICENSE
+Encoding: UTF-8
+Imports:
+    testthat, 
+    rmarkdown, 
+    ggplot2, 
+    dplyr,
+	data.table,
+	riskRegression,
+	prodlim,
+	survival
+Suggests: 
+    knitr
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: 
+    R (>= 3.5.0)
+URL: https://github.com/GEMINI-Medicine/diabetes-larp
