@@ -61,445 +61,218 @@ defined, please carefully review the data dictionary in
 Expand this section to review the data dictionary
 </summary>
 
-<table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 9%" />
+<col style="width: 5%" />
+<col style="width: 3%" />
+<col style="width: 11%" />
+<col style="width: 66%" />
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-X
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Variable
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Variable.name.in.dummy.data
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Variable.type
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Range.categories
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Definition
-</th>
+<tr class="header">
+<th style="text-align: left;">X</th>
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Variable.name.in.dummy.data</th>
+<th style="text-align: left;">Variable.type</th>
+<th style="text-align: left;">Range.categories</th>
+<th style="text-align: left;">Definition</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Outcomes
-</td>
-<td style="text-align:left;">
-Time
-</td>
-<td style="text-align:left;">
-time
-</td>
-<td style="text-align:left;">
-Numeric
-</td>
-<td style="text-align:left;">
-Observed range: 0.1-2543.0
-</td>
-<td style="text-align:left;">
-Time to event (in days)
-</td>
+<tr class="odd">
+<td style="text-align: left;">Outcomes</td>
+<td style="text-align: left;">Time</td>
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">Numeric</td>
+<td style="text-align: left;">Observed range: 0.1-2543.0</td>
+<td style="text-align: left;">Time to event (in days)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Status
-</td>
-<td style="text-align:left;">
-status
-</td>
-<td style="text-align:left;">
-Categorical
-</td>
-<td style="text-align:left;">
-0 = right-censored / 1 = foot complication / 2 = death
-</td>
-<td style="text-align:left;">
-Observed status at follow-up time point
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Status</td>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">Categorical</td>
+<td style="text-align: left;">0 = right-censored / 1 = foot complication
+/ 2 = death</td>
+<td style="text-align: left;">Observed status at follow-up time
+point</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Predictors
-</td>
-<td style="text-align:left;">
-Age
-</td>
-<td style="text-align:left;">
-age
-</td>
-<td style="text-align:left;">
-Numeric (integer)
-</td>
-<td style="text-align:left;">
-18-105
-</td>
-<td style="text-align:left;">
-Number of years between date of birth and hospital admission listed in
-CIHI DAD
-</td>
+<tr class="odd">
+<td style="text-align: left;">Predictors</td>
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">age</td>
+<td style="text-align: left;">Numeric (integer)</td>
+<td style="text-align: left;">18-105</td>
+<td style="text-align: left;">Number of years between date of birth and
+hospital admission listed in CIHI DAD</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Sex
-</td>
-<td style="text-align:left;">
-sex\_f
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-Female/Not female
-</td>
-<td style="text-align:left;">
-Biological sex of the patient as listed in CIHI DAD
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">sex_f</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">Female/Not female</td>
+<td style="text-align: left;">Biological sex of the patient as listed in
+CIHI DAD</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Admission urgency
-</td>
-<td style="text-align:left;">
-elective\_adm
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-Elective/Not elective
-</td>
-<td style="text-align:left;">
-Admission category listed in CIHI DAD. If admission is coded as category
-‘L’, the hospitalization is considered to be elective/scheduled
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Admission urgency</td>
+<td style="text-align: left;">elective_adm</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">Elective/Not elective</td>
+<td style="text-align: left;">Admission category listed in CIHI DAD. If
+admission is coded as category ‘L’, the hospitalization is considered to
+be elective/scheduled</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Homelessness
-</td>
-<td style="text-align:left;">
-homelessness
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/ TRUE
-</td>
-<td style="text-align:left;">
-Flag indicating whether patient experienced homelessness at the time of
-admission based on presence of ICD-10-CA code Z59.0 or Z59.1
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Homelessness</td>
+<td style="text-align: left;">homelessness</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/ TRUE</td>
+<td style="text-align: left;">Flag indicating whether patient
+experienced homelessness at the time of admission based on presence of
+ICD-10-CA code Z59.0 or Z59.1</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Peripheral artery disease
-</td>
-<td style="text-align:left;">
-peripheral\_AD
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA code for Atherosclerosis and arterial thrombosis of lower
-extremities: I70.0, I70.2, I70.8, I70.9, I73.9, I74.0, I74.4, I74.5,
-I74.8, I74.9, I79.2, or Angiopathy in diabetes: E10.50, E10.51, E10.70,
-E10.71, E11.50, E11.51, E11.70, E11.71, E13.50, E13.51, E13.70, E13.71,
-E14.50, E14.51, E14.70, E14.71
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Peripheral artery disease</td>
+<td style="text-align: left;">peripheral_AD</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA code for Atherosclerosis and
+arterial thrombosis of lower extremities: I70.0, I70.2, I70.8, I70.9,
+I73.9, I74.0, I74.4, I74.5, I74.8, I74.9, I79.2, or Angiopathy in
+diabetes: E10.50, E10.51, E10.70, E10.71, E11.50, E11.51, E11.70,
+E11.71, E13.50, E13.51, E13.70, E13.71, E14.50, E14.51, E14.70,
+E14.71</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Coronary artery disease
-</td>
-<td style="text-align:left;">
-coronary\_AD
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA code I20, I21, I22, I23, I24, I25 or CCI code 1IJ50, 1IJ57,
-1IJ76
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Coronary artery disease</td>
+<td style="text-align: left;">coronary_AD</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA code I20, I21, I22, I23, I24,
+I25 or CCI code 1IJ50, 1IJ57, 1IJ76</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Ischemic stroke or transient ischemic attack
-</td>
-<td style="text-align:left;">
-stroke
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA code I63 (excluding I63.6), I64., H34.1, G45. (excluding
-G45.0) or G45.4
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Ischemic stroke or transient ischemic
+attack</td>
+<td style="text-align: left;">stroke</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA code I63 (excluding I63.6),
+I64., H34.1, G45. (excluding G45.0) or G45.4</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Congestive heart failure
-</td>
-<td style="text-align:left;">
-CHF
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA code I50
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Congestive heart failure</td>
+<td style="text-align: left;">CHF</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA code I50</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Hypertension
-</td>
-<td style="text-align:left;">
-hypertension
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA codes I10, I11, I12, I13, I15
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Hypertension</td>
+<td style="text-align: left;">hypertension</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA codes I10, I11, I12, I13,
+I15</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-COPD
-</td>
-<td style="text-align:left;">
-COPD
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA codes J41, J42, J43, J44
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">COPD</td>
+<td style="text-align: left;">COPD</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA codes J41, J42, J43, J44</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Chronic kidney disease
-</td>
-<td style="text-align:left;">
-CKD
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA codes N032-N037, N052-N057, N18, N19, N250, Z490-Z492, Z940,
-Z992
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Chronic kidney disease</td>
+<td style="text-align: left;">CKD</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA codes N032-N037, N052-N057, N18,
+N19, N250, Z490-Z492, Z940, Z992</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Malignancy
-</td>
-<td style="text-align:left;">
-malignancy
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA codes C00-C97
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Malignancy</td>
+<td style="text-align: left;">malignancy</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA codes C00-C97</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Mental illness
-</td>
-<td style="text-align:left;">
-mental\_illness
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-ICD-10-CA codes for Mood or anxiety disorder (F30-F39, F40-48),
-Schizophrenia, schizotypal and delusional disorders (F20-F29), or Mental
-and behavioural disorders due to psychoactive substance use (F10-F19)
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mental illness</td>
+<td style="text-align: left;">mental_illness</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">ICD-10-CA codes for Mood or anxiety
+disorder (F30-F39, F40-48), Schizophrenia, schizotypal and delusional
+disorders (F20-F29), or Mental and behavioural disorders due to
+psychoactive substance use (F10-F19)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Hemoglobin A1C
-</td>
-<td style="text-align:left;">
-Hb\_A1C
-</td>
-<td style="text-align:left;">
-Numeric (%)
-</td>
-<td style="text-align:left;">
-Observed range: 1.2-21.7
-</td>
-<td style="text-align:left;">
-LOINC code 3034639: Hemoglobin A1c \[Mass/volume\] in Blood; last result
-value measured during admission
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Hemoglobin A1C</td>
+<td style="text-align: left;">Hb_A1C</td>
+<td style="text-align: left;">Numeric (%)</td>
+<td style="text-align: left;">Observed range: 1.2-21.7</td>
+<td style="text-align: left;">LOINC code 3034639: Hemoglobin A1c
+[Mass/volume] in Blood; last result value measured during admission</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Creatinine
-</td>
-<td style="text-align:left;">
-creatinine
-</td>
-<td style="text-align:left;">
-Numeric (?mol/L)
-</td>
-<td style="text-align:left;">
-Observed range: 1-2124
-</td>
-<td style="text-align:left;">
-LOINC code 3020564: Creatinine \[Moles/volume\] in Serum or Plasma; last
-result value measured during admission
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Creatinine</td>
+<td style="text-align: left;">creatinine</td>
+<td style="text-align: left;">Numeric (?mol/L)</td>
+<td style="text-align: left;">Observed range: 1-2124</td>
+<td style="text-align: left;">LOINC code 3020564: Creatinine
+[Moles/volume] in Serum or Plasma; last result value measured during
+admission</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Albumin
-</td>
-<td style="text-align:left;">
-albumin
-</td>
-<td style="text-align:left;">
-Numeric (g/L)
-</td>
-<td style="text-align:left;">
-Observed range: 7-100
-</td>
-<td style="text-align:left;">
-LOINC code 3024561: Albumin \[Mass/volume\] in Serum or Plasma; last
-result value measured during admission
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Albumin</td>
+<td style="text-align: left;">albumin</td>
+<td style="text-align: left;">Numeric (g/L)</td>
+<td style="text-align: left;">Observed range: 7-100</td>
+<td style="text-align: left;">LOINC code 3024561: Albumin [Mass/volume]
+in Serum or Plasma; last result value measured during admission</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Hemoglobin A1C = missing
-</td>
-<td style="text-align:left;">
-Hb\_A1C\_missing
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-Missing indicator for Hemoglobin A1C
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Hemoglobin A1C = missing</td>
+<td style="text-align: left;">Hb_A1C_missing</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">Missing indicator for Hemoglobin A1C</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Creatinine = missing
-</td>
-<td style="text-align:left;">
-creatinine\_missing
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-Missing indicator for creatinine
-</td>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Creatinine = missing</td>
+<td style="text-align: left;">creatinine_missing</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">Missing indicator for creatinine</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Albumin = missing
-</td>
-<td style="text-align:left;">
-albumin\_misssing
-</td>
-<td style="text-align:left;">
-Binary
-</td>
-<td style="text-align:left;">
-FALSE/TRUE
-</td>
-<td style="text-align:left;">
-Missing indicator for albumin
-</td>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Albumin = missing</td>
+<td style="text-align: left;">albumin_misssing</td>
+<td style="text-align: left;">Binary</td>
+<td style="text-align: left;">FALSE/TRUE</td>
+<td style="text-align: left;">Missing indicator for albumin</td>
 </tr>
 </tbody>
 </table>
@@ -634,152 +407,82 @@ Show code
     )
 
 </details>
-<table class="table" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-Overall
-</th>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Overall</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-n
-</td>
-<td style="text-align:left;">
-10000
-</td>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">10000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-age (median \[IQR\])
-</td>
-<td style="text-align:left;">
-69.56 \[59.92, 79.92\]
-</td>
+<tr class="even">
+<td style="text-align: left;">age (median [IQR])</td>
+<td style="text-align: left;">69.56 [59.92, 79.92]</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-sex\_f = TRUE (%)
-</td>
-<td style="text-align:left;">
-4950 (49.5)
-</td>
+<tr class="odd">
+<td style="text-align: left;">sex_f = TRUE (%)</td>
+<td style="text-align: left;">4950 (49.5)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-elective\_adm = TRUE (%)
-</td>
-<td style="text-align:left;">
-201 ( 2.0)
-</td>
+<tr class="even">
+<td style="text-align: left;">elective_adm = TRUE (%)</td>
+<td style="text-align: left;">201 ( 2.0)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-peripheral\_AD = TRUE (%)
-</td>
-<td style="text-align:left;">
-101 ( 1.0)
-</td>
+<tr class="odd">
+<td style="text-align: left;">peripheral_AD = TRUE (%)</td>
+<td style="text-align: left;">101 ( 1.0)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-coronary\_AD = TRUE (%)
-</td>
-<td style="text-align:left;">
-1231 (12.3)
-</td>
+<tr class="even">
+<td style="text-align: left;">coronary_AD = TRUE (%)</td>
+<td style="text-align: left;">1231 (12.3)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-stroke = TRUE (%)
-</td>
-<td style="text-align:left;">
-490 ( 4.9)
-</td>
+<tr class="odd">
+<td style="text-align: left;">stroke = TRUE (%)</td>
+<td style="text-align: left;">490 ( 4.9)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-CHF = TRUE (%)
-</td>
-<td style="text-align:left;">
-1293 (12.9)
-</td>
+<tr class="even">
+<td style="text-align: left;">CHF = TRUE (%)</td>
+<td style="text-align: left;">1293 (12.9)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-hypertension = TRUE (%)
-</td>
-<td style="text-align:left;">
-4475 (44.8)
-</td>
+<tr class="odd">
+<td style="text-align: left;">hypertension = TRUE (%)</td>
+<td style="text-align: left;">4475 (44.8)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-COPD = TRUE (%)
-</td>
-<td style="text-align:left;">
-570 ( 5.7)
-</td>
+<tr class="even">
+<td style="text-align: left;">COPD = TRUE (%)</td>
+<td style="text-align: left;">570 ( 5.7)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-CKD = TRUE (%)
-</td>
-<td style="text-align:left;">
-388 ( 3.9)
-</td>
+<tr class="odd">
+<td style="text-align: left;">CKD = TRUE (%)</td>
+<td style="text-align: left;">388 ( 3.9)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-malignancy = TRUE (%)
-</td>
-<td style="text-align:left;">
-1098 (11.0)
-</td>
+<tr class="even">
+<td style="text-align: left;">malignancy = TRUE (%)</td>
+<td style="text-align: left;">1098 (11.0)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-mental\_illness = TRUE (%)
-</td>
-<td style="text-align:left;">
-700 ( 7.0)
-</td>
+<tr class="odd">
+<td style="text-align: left;">mental_illness = TRUE (%)</td>
+<td style="text-align: left;">700 ( 7.0)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-homelessness = TRUE (%)
-</td>
-<td style="text-align:left;">
-52 ( 0.5)
-</td>
+<tr class="even">
+<td style="text-align: left;">homelessness = TRUE (%)</td>
+<td style="text-align: left;">52 ( 0.5)</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Hb\_A1C (median \[IQR\])
-</td>
-<td style="text-align:left;">
-7.69 \[6.60, 8.93\]
-</td>
+<tr class="odd">
+<td style="text-align: left;">Hb_A1C (median [IQR])</td>
+<td style="text-align: left;">7.69 [6.60, 8.93]</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-creatinine (median \[IQR\])
-</td>
-<td style="text-align:left;">
-79.82 \[66.56, 93.13\]
-</td>
+<tr class="even">
+<td style="text-align: left;">creatinine (median [IQR])</td>
+<td style="text-align: left;">79.82 [66.56, 93.13]</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-albumin (median \[IQR\])
-</td>
-<td style="text-align:left;">
-30.36 \[23.71, 36.85\]
-</td>
+<tr class="odd">
+<td style="text-align: left;">albumin (median [IQR])</td>
+<td style="text-align: left;">30.36 [23.71, 36.85]</td>
 </tr>
 </tbody>
 </table>
