@@ -32,7 +32,6 @@ To run the code below, please install and load the following R libraries:
 library(data.table)
 library(dplyr)
 library(riskRegression)
-library(randomForestSRC)
 library(rms)
 library(prodlim)
 library(tableone)

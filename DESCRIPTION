@@ -8,16 +8,17 @@ Description: .
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports:
-    testthat, 
-    rmarkdown, 
-    ggplot2, 
-    dplyr,
 	data.table,
+	dplyr,
 	riskRegression,
+	rms,
 	prodlim,
-	survival
+	tableone,
+	ggplot2
 Suggests: 
-    knitr
+    knitr,
+	rmarkdown,
+	kableExtra
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: 
