@@ -14,6 +14,9 @@ test_that("dummy data is created correctly", {
   expect_equal(round(max(dummy_data$creatinine, na.rm = TRUE), 2), 153.86)
 })
 
+test_that("there is only one model object (for FGR)", {
+  expect_equal(list.files("models/"), "final_FGR_clean.rds")
+})
 
 test_that("model object contains expected list items", {
   model <- readRDS("models/final_FGR_clean.rds")
