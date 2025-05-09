@@ -11,7 +11,7 @@ on:
       
 
 jobs:
-  build:
+  knit:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

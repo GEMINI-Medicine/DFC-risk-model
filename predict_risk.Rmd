@@ -44,7 +44,7 @@ library(ggplot2)
 The final FGR model (trained on the whole cohort reported in Roberts & Loeffler et al.) is saved as an .rds file in this repository and can be loaded as follows: 
 
 ```{r}
-model <- readRDS("models/final_FGR_clean.rds")
+model <- readRDS("model/final_FGR_clean.rds")
 ```
 
 The model was optimized using `riskRgression::FGR()` (wrapper for `cmprsk::crr()` to ensure compatibility with `riskRgression::Score()` - see section below on obtaining model performance metrics). The FGR model object contains all relevant items returned by `riskRegression::FGR()`, including model coefficients (and bootstrapped SEs) as well as all knot locations for continuous predictors, which were modeled with restricted cubic splines using `rms::rcs()`:

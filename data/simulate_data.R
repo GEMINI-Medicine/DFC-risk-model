@@ -6,7 +6,7 @@ simulate_data <- function(n = 10000, save_data = FALSE) {
   set.seed(99)
   
   # load model object
-  FGR <- readRDS("models/final_FGR_clean.rds")
+  FGR <- readRDS("model/final_FGR_clean.rds")
   coefs <- FGR$crrFit$coef
 
   coefs_death <- -coefs / 10

@@ -15,18 +15,18 @@ test_that("dummy data is created correctly", {
 })
 
 test_that("there is only one model object (for FGR)", {
-  expect_equal(list.files("models/"), "final_FGR_clean.rds")
+  expect_equal(list.files("model/"), "final_FGR_clean.rds")
 })
 
 test_that("model object contains expected list items", {
-  model <- readRDS("models/final_FGR_clean.rds")
+  model <- readRDS("model/final_FGR_clean.rds")
   expect_equal(names(model), c("crrFit", "call", "terms", "form", "cause", "coef", "splines"))
 })
 
 test_that("predicted risk scores are as expected", {
   source("data/simulate_data.R")
   dummy_data <- simulate_data()
-  model <- readRDS("models/final_FGR_clean.rds")
+  model <- readRDS("model/final_FGR_clean.rds")
   
   # create missing indicator flag
   dummy_data[, Hb_A1C_missing := ifelse(is.na(Hb_A1C), TRUE, FALSE)]
