@@ -26,14 +26,14 @@ jobs:
         with:
           cache: true
           extra-packages: |
-            pak
+            remotes
           needs: |
             testthat
 
-      - name: Install dependencies with pak
+      - name: Install dependencies
         run: |
-          install.packages("pak", repos = "https://cran.r-project.org")
-          pak::pak("local::.")
+          install.packages("remotes", repos = "https://cran.r-project.org")
+          remotes::install_deps(dependencies = c("Imports", "Depends")
         shell: Rscript {0}
 
       - name: Run unit tests
