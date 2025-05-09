@@ -19,8 +19,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes"))
-          remotes::install_deps(dependencies = TRUE)
+          install.packages("pak", "testthat")
+          pak::pkg_install(dependencies = c("Imports", "Depends")
         shell: Rscript {0}
 
       - name: Run unit tests

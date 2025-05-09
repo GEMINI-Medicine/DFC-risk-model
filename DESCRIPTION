@@ -13,16 +13,11 @@ Imports:
 	riskRegression,
 	prodlim,
 	rms,
-	truncnorm,
-	tableone,
-	ggplot2
+	truncnorm
 Suggests: 
     knitr,
 	rmarkdown,
-	testthat,
+	tableone,
+	ggplot2
 	kableExtra
-Config/testthat/edition: 3
-VignetteBuilder: knitr
-Depends: 
-    R (>= 3.5.0)
 URL: https://github.com/GEMINI-Medicine/diabetes-larp
