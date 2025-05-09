@@ -25,11 +25,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages("remotes", repos = "https://cran.r-project.org")
-          remotes::install_deps(dependencies = c("Imports", "Depends"))
-        shell: Rscript -e {0}
-
+          R -e "install.packages('remotes', repos = 'https://cran.r-project.org')"
+          R -e "remotes::install_deps(dependencies = c('Imports', 'Depends'))"
+          
       - name: Run unit tests
         run: |
-          testthat::test_dir("tests")
-        shell: Rscript -e {0}
+          R -e "testthat::test_dir('tests')"
