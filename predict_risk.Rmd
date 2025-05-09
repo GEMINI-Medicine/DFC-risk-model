@@ -68,12 +68,8 @@ The model object can be used to generate predicted risk scores on new data (and 
 <details><summary>Expand this section to review the data dictionary</summary>
 
 ```{r echo = FALSE}
-library(kableExtra)
-
 data_dictionary <- read.csv("data/data_dictionary.csv")
-kable(data_dictionary) %>%
-  kable_styling(full_width = FALSE, font_size = 10) %>%
-  scroll_box(height = "300px", width = "100%")
+kable(data_dictionary)
 ```
 
 </details>
@@ -201,8 +197,7 @@ tab1 <- print(
 </details>
 
 ```{r echo=FALSE}
-kable(tab1, escape = FALSE) %>%
-  kable_styling(full_width = FALSE, font_size = 12)
+kable(tab1, escape = FALSE)
 ```
 
 

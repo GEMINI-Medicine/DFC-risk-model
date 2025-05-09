@@ -17,6 +17,5 @@ Suggests:
     knitr,
 	rmarkdown,
 	tableone,
-	ggplot2,
-	kableExtra
+	ggplot2
 URL: https://github.com/GEMINI-Medicine/DFC-risk-model
