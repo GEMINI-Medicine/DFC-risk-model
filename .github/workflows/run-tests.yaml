@@ -27,6 +27,7 @@ jobs:
         run: |
           R -e "install.packages('remotes', repos = 'https://cran.r-project.org')"
           R -e "remotes::install_deps(dependencies = c('Imports', 'Depends'))"
+          R -e "install.packages('testthat', repos = 'https://cran.r-project.org')"
           
       - name: Run unit tests
         run: |
