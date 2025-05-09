@@ -69,7 +69,7 @@ The model object can be used to generate predicted risk scores on new data (and 
 
 ```{r echo = FALSE}
 data_dictionary <- read.csv("data/data_dictionary.csv")
-kable(data_dictionary)
+knitr::kable(data_dictionary)
 ```
 
 </details>
@@ -197,7 +197,7 @@ tab1 <- print(
 </details>
 
 ```{r echo=FALSE}
-kable(tab1, escape = FALSE)
+knitr::kable(tab1, escape = FALSE)
 ```
 
 
