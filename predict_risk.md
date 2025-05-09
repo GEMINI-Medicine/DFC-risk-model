@@ -1,25 +1,3 @@
-Development, internal-external validation, and use of a prognostic model
-to predict future foot complications among people with diabetes recently
-discharged from hospital in Ontario, Canada
-================
-
-- <a href="#overview" id="toc-overview">Overview</a>
-- <a href="#set-up" id="toc-set-up">Set-up</a>
-- <a href="#fine-gray-regression-fgr-model"
-  id="toc-fine-gray-regression-fgr-model">Fine-Gray Regression (FGR)
-  Model</a>
-- <a href="#generating-predictions-on-new-data"
-  id="toc-generating-predictions-on-new-data">Generating predictions on
-  new data</a>
-- <a href="#evaluating-model-performance"
-  id="toc-evaluating-model-performance">Evaluating model performance</a>
-  - <a href="#data-pre-processing" id="toc-data-pre-processing">Data
-    pre-processing</a>
-  - <a href="#performance-metrics" id="toc-performance-metrics">Performance
-    metrics</a>
-    - <a href="#auroc" id="toc-auroc">AUROC</a>
-    - <a href="#calibration" id="toc-calibration">Calibration</a>
-
 # Overview
 
 This file contains R code illustrating how to:
@@ -34,16 +12,13 @@ This file contains R code illustrating how to:
 To run the code below, please install and load the following R
 libraries:
 
-``` r
-library(data.table)
-library(dplyr)
-library(riskRegression)
-library(randomForestSRC)
-library(rms)
-library(prodlim)
-library(tableone)
-library(ggplot2)
-```
+    library(data.table)
+    library(dplyr)
+    library(riskRegression)
+    library(rms)
+    library(prodlim)
+    library(tableone)
+    library(ggplot2)
 
 # Fine-Gray Regression (FGR) Model
 
@@ -51,9 +26,7 @@ The final FGR model (trained on the whole cohort reported in Roberts &
 Loeffler et al.) is saved as an .rds file in this repository and can be
 loaded as follows:
 
-``` r
-model <- readRDS("models/final_FGR_clean.rds")
-```
+    model <- readRDS("model/final_FGR_clean.rds")
 
 The model was optimized using `riskRgression::FGR()` (wrapper for
 `cmprsk::crr()` to ensure compatibility with `riskRgression::Score()` -
@@ -63,21 +36,17 @@ including model coefficients (and bootstrapped SEs) as well as all knot
 locations for continuous predictors, which were modeled with restricted
 cubic splines using `rms::rcs()`:
 
-``` r
-names(model)
-```
+    names(model)
 
     ## [1] "crrFit"  "call"    "terms"   "form"    "cause"   "coef"    "splines"
 
-``` r
-# crrFit = model fit obtained with riskRegression::FGR()
-# call = original model call (note: variance was set to FALSE, SEs of coefficients were obtained using bootstrapping)
-# terms = model terms
-# form = model formula
-# cause = 1 (event of interest: 1 = foot complication)
-# coef = optimized model coefficients (SEs) and corresponding subdistribution hazard ratios (sHR)
-# splines = knot locations for restricted cubic splines for continuous predictors
-```
+    # crrFit = model fit obtained with riskRegression::FGR()
+    # call = original model call (note: variance was set to FALSE, SEs of coefficients were obtained using bootstrapping)
+    # terms = model terms
+    # form = model formula
+    # cause = 1 (event of interest: 1 = foot complication)
+    # coef = optimized model coefficients (SEs) and corresponding subdistribution hazard ratios (sHR)
+    # splines = knot locations for restricted cubic splines for continuous predictors
 
 # Generating predictions on new data
 
@@ -91,9 +60,6 @@ defined, please carefully review the data dictionary in
 <summary>
 Expand this section to review the data dictionary
 </summary>
-
-<div
-style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 
 <table class="table" style="font-size: 10px; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -186,7 +152,7 @@ CIHI DAD
 Sex
 </td>
 <td style="text-align:left;">
-sex_f
+sex\_f
 </td>
 <td style="text-align:left;">
 Binary
@@ -205,7 +171,7 @@ Biological sex of the patient as listed in CIHI DAD
 Admission urgency
 </td>
 <td style="text-align:left;">
-elective_adm
+elective\_adm
 </td>
 <td style="text-align:left;">
 Binary
@@ -245,7 +211,7 @@ admission based on presence of ICD-10-CA code Z59.0 or Z59.1
 Peripheral artery disease
 </td>
 <td style="text-align:left;">
-peripheral_AD
+peripheral\_AD
 </td>
 <td style="text-align:left;">
 Binary
@@ -268,7 +234,7 @@ E14.50, E14.51, E14.70, E14.71
 Coronary artery disease
 </td>
 <td style="text-align:left;">
-coronary_AD
+coronary\_AD
 </td>
 <td style="text-align:left;">
 Binary
@@ -404,7 +370,7 @@ ICD-10-CA codes C00-C97
 Mental illness
 </td>
 <td style="text-align:left;">
-mental_illness
+mental\_illness
 </td>
 <td style="text-align:left;">
 Binary
@@ -425,7 +391,7 @@ and behavioural disorders due to psychoactive substance use (F10-F19)
 Hemoglobin A1C
 </td>
 <td style="text-align:left;">
-Hb_A1C
+Hb\_A1C
 </td>
 <td style="text-align:left;">
 Numeric (%)
@@ -485,7 +451,7 @@ result value measured during admission
 Hemoglobin A1C = missing
 </td>
 <td style="text-align:left;">
-Hb_A1C_missing
+Hb\_A1C\_missing
 </td>
 <td style="text-align:left;">
 Binary
@@ -504,7 +470,7 @@ Missing indicator for Hemoglobin A1C
 Creatinine = missing
 </td>
 <td style="text-align:left;">
-creatinine_missing
+creatinine\_missing
 </td>
 <td style="text-align:left;">
 Binary
@@ -523,7 +489,7 @@ Missing indicator for creatinine
 Albumin = missing
 </td>
 <td style="text-align:left;">
-albumin_misssing
+albumin\_misssing
 </td>
 <td style="text-align:left;">
 Binary
@@ -538,38 +504,34 @@ Missing indicator for albumin
 </tbody>
 </table>
 
-</div>
-
 </details>
 
 <br>
 
 Let’s create some new data from a single (hypothetical) patient:
 
-``` r
-# create data for a single patient  
-new_data <- data.frame(
-  age = 67,
-  sex_f = 1,
-  elective_adm = 1,
-  homelessness = 0,
-  peripheral_AD = 0,
-  coronary_AD = 1,
-  stroke = 0,
-  CHF = 0,
-  hypertension = 1,
-  COPD = 0,
-  CKD = 0,
-  malignancy = 0,
-  mental_illness = 0,
-  creatinine = 140.0,
-  Hb_A1C = 8.5,
-  albumin = 32.1,
-  Hb_A1C_missing = 0,
-  creatinine_missing = 0,
-  albumin_missing = 0
-)
-```
+    # create data for a single patient  
+    new_data <- data.frame(
+      age = 67,
+      sex_f = 1,
+      elective_adm = 1,
+      homelessness = 0,
+      peripheral_AD = 0,
+      coronary_AD = 1,
+      stroke = 0,
+      CHF = 0,
+      hypertension = 1,
+      COPD = 0,
+      CKD = 0,
+      malignancy = 0,
+      mental_illness = 0,
+      creatinine = 140.0,
+      Hb_A1C = 8.5,
+      albumin = 32.1,
+      Hb_A1C_missing = 0,
+      creatinine_missing = 0,
+      albumin_missing = 0
+    )
 
 Crucially, for the FGR model, continuous variables (age, hemoglobin A1C,
 creatinine, and albumin) were modelled using restricted cubic splines.
@@ -577,35 +539,29 @@ which we additionally need to derive the non-linear components for each
 continuous predictor . We can use the knot locations stored in the `FGR`
 model object to achieve this:
 
-``` r
-## this is only relevant for the FGR model
-# derive non-linear splines based on knot locations
-age_splines <- rcs(new_data$age, model$splines$age_knots)
-creatinine_splines <- rcs(new_data$creatinine, model$splines$creatinine_knots)
-Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$splines$hba1c_knots)
-albumin_splines <- rcs(new_data$albumin, model$splines$albumin_knots)
+    ## this is only relevant for the FGR model
+    # derive non-linear splines based on knot locations
+    age_splines <- rcs(new_data$age, model$splines$age_knots)
+    creatinine_splines <- rcs(new_data$creatinine, model$splines$creatinine_knots)
+    Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$splines$hba1c_knots)
+    albumin_splines <- rcs(new_data$albumin, model$splines$albumin_knots)
 
-# add non-linear components to new_data
-new_data$age1 <- age_splines[, 2]
-new_data$age2 <- age_splines[, 3]
-new_data$creatinine1 <- creatinine_splines[, 2]
-new_data$creatinine2 <- creatinine_splines[, 3]
-new_data$Hb_A1C1 <- Hb_A1C_splines[, 2]
-new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
-new_data$albumin1 <- albumin_splines[, 2]
-```
+    # add non-linear components to new_data
+    new_data$age1 <- age_splines[, 2]
+    new_data$age2 <- age_splines[, 3]
+    new_data$creatinine1 <- creatinine_splines[, 2]
+    new_data$creatinine2 <- creatinine_splines[, 3]
+    new_data$Hb_A1C1 <- Hb_A1C_splines[, 2]
+    new_data$Hb_A1C2 <- Hb_A1C_splines[, 3]
+    new_data$albumin1 <- albumin_splines[, 2]
 
 We can now predict the risk of this patient for developing foot
 complications (cause = 1) within 1 year:
 
-``` r
-# predict risk of foot complication at 1 year
-risk_1_year <- predict(model, newdata = new_data, times = 365.25)[1]
-```
+    # predict risk of foot complication at 1 year
+    risk_1_year <- predict(model, newdata = new_data, times = 365.25)[1]
 
-``` r
-print(risk_1_year)
-```
+    print(risk_1_year)
 
     ## [1] 0.0171758
 
@@ -615,17 +571,13 @@ diabetic foot complication within 1 year.
 We can also plot the cumulative incidence function (CIF) for this
 patient as follows:
 
-``` r
-# to plot CIF, we need to extract predicted values at multiple time points
-time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
-p <- predict(model, newdata = new_data, times = time)
-```
+    # to plot CIF, we need to extract predicted values at multiple time points
+    time <- seq(1, 365 * 5, 5) # predict up to 5 years in steps of 5 days
+    p <- predict(model, newdata = new_data, times = time)
 
-``` r
-plot(time, p, type = "l")
-```
+    plot(time, p, type = "l")
 
-![](predict_risk_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](predict_risk_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 # Evaluating model performance
 
@@ -642,10 +594,8 @@ We’ll use some (randomly generated) dummy data here to illustrate how
 you can obtain AUROC and calibration metrics reported in Roberts &
 Loeffler et al. (in preparation):
 
-``` r
-#dummy_data <- simulate_data(n = 10000, save_data = TRUE)
-dummy_data <- readRDS("data/dummy_data.rds")
-```
+    #dummy_data <- simulate_data(n = 10000, save_data = TRUE)
+    dummy_data <- readRDS("data/dummy_data.rds")
 
 ## Data pre-processing
 
@@ -657,33 +607,31 @@ reported by Roberts & Loeffler et al.:
 Show code
 </summary>
 
-``` r
-tab1 <- CreateTableOne(vars = c("age",
-                                "sex_f",
-                                "elective_adm",
-                                "peripheral_AD",
-                                "coronary_AD",
-                                "stroke",
-                                "CHF",
-                                "hypertension",
-                                "COPD",
-                                "CKD",
-                                "malignancy",
-                                "mental_illness",
-                                "homelessness",
-                                "Hb_A1C",
-                                "creatinine",
-                                "albumin"
-), data = dummy_data)
+    tab1 <- CreateTableOne(vars = c("age",
+                                    "sex_f",
+                                    "elective_adm",
+                                    "peripheral_AD",
+                                    "coronary_AD",
+                                    "stroke",
+                                    "CHF",
+                                    "hypertension",
+                                    "COPD",
+                                    "CKD",
+                                    "malignancy",
+                                    "mental_illness",
+                                    "homelessness",
+                                    "Hb_A1C",
+                                    "creatinine",
+                                    "albumin"
+    ), data = dummy_data)
 
-tab1 <- print(
-  tab1,
-  nonnormal = c("age", "Hb_A1C", "creatinine", "albumin"),
-  includeNA = TRUE,
-  showAllLevels = FALSE,
-  printToggle = FALSE
-)
-```
+    tab1 <- print(
+      tab1,
+      nonnormal = c("age", "Hb_A1C", "creatinine", "albumin"),
+      includeNA = TRUE,
+      showAllLevels = FALSE,
+      printToggle = FALSE
+    )
 
 </details>
 <table class="table" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
@@ -715,7 +663,7 @@ age (median \[IQR\])
 </tr>
 <tr>
 <td style="text-align:left;">
-sex_f = TRUE (%)
+sex\_f = TRUE (%)
 </td>
 <td style="text-align:left;">
 4950 (49.5)
@@ -723,7 +671,7 @@ sex_f = TRUE (%)
 </tr>
 <tr>
 <td style="text-align:left;">
-elective_adm = TRUE (%)
+elective\_adm = TRUE (%)
 </td>
 <td style="text-align:left;">
 201 ( 2.0)
@@ -731,7 +679,7 @@ elective_adm = TRUE (%)
 </tr>
 <tr>
 <td style="text-align:left;">
-peripheral_AD = TRUE (%)
+peripheral\_AD = TRUE (%)
 </td>
 <td style="text-align:left;">
 101 ( 1.0)
@@ -739,7 +687,7 @@ peripheral_AD = TRUE (%)
 </tr>
 <tr>
 <td style="text-align:left;">
-coronary_AD = TRUE (%)
+coronary\_AD = TRUE (%)
 </td>
 <td style="text-align:left;">
 1231 (12.3)
@@ -795,7 +743,7 @@ malignancy = TRUE (%)
 </tr>
 <tr>
 <td style="text-align:left;">
-mental_illness = TRUE (%)
+mental\_illness = TRUE (%)
 </td>
 <td style="text-align:left;">
 700 ( 7.0)
@@ -811,7 +759,7 @@ homelessness = TRUE (%)
 </tr>
 <tr>
 <td style="text-align:left;">
-Hb_A1C (median \[IQR\])
+Hb\_A1C (median \[IQR\])
 </td>
 <td style="text-align:left;">
 7.69 \[6.60, 8.93\]
@@ -843,133 +791,140 @@ original model. Specifically, we create a new variable indicating
 missingness of lab values, and then set the corresponding test results
 to 0:
 
-``` r
-# create missing indicator flag
-dummy_data[, Hb_A1C_missing := ifelse(is.na(Hb_A1C), TRUE, FALSE)]
-dummy_data[, creatinine_missing := ifelse(is.na(creatinine), TRUE, FALSE)]
-dummy_data[, albumin_missing := ifelse(is.na(albumin), TRUE, FALSE)]
+    # create missing indicator flag
+    dummy_data[, Hb_A1C_missing := ifelse(is.na(Hb_A1C), TRUE, FALSE)]
+    dummy_data[, creatinine_missing := ifelse(is.na(creatinine), TRUE, FALSE)]
+    dummy_data[, albumin_missing := ifelse(is.na(albumin), TRUE, FALSE)]
 
-# set missing test results to 0
-dummy_data[is.na(Hb_A1C), Hb_A1C := 0]
-dummy_data[is.na(creatinine), creatinine := 0]
-dummy_data[is.na(albumin), albumin := 0]
-```
+    # set missing test results to 0
+    dummy_data[is.na(Hb_A1C), Hb_A1C := 0]
+    dummy_data[is.na(creatinine), creatinine := 0]
+    dummy_data[is.na(albumin), albumin := 0]
 
 Additionally, we again need to add the non-linear components. Here, we
 are applying the same knot locations that were used in the validated
 model:
 
-``` r
-# add non-linear components to new_data
-age_splines <- rcs(dummy_data$age, model$splines$age_knots)
-creatinine_splines <- rcs(dummy_data$creatinine, model$splines$creatinine_knots)
-Hb_A1C_splines <- rcs(dummy_data$Hb_A1C, model$splines$hba1c_knots)
-albumin_splines <- rcs(dummy_data$albumin, model$splines$albumin_knots)
+    # add non-linear components to new_data
+    age_splines <- rcs(dummy_data$age, model$splines$age_knots)
+    creatinine_splines <- rcs(dummy_data$creatinine, model$splines$creatinine_knots)
+    Hb_A1C_splines <- rcs(dummy_data$Hb_A1C, model$splines$hba1c_knots)
+    albumin_splines <- rcs(dummy_data$albumin, model$splines$albumin_knots)
 
-dummy_data[, age1 := age_splines[, 2]]
-dummy_data[, age2 := age_splines[, 3]]
-dummy_data[, creatinine1 := creatinine_splines[, 2]]
-dummy_data[, creatinine2 := creatinine_splines[, 3]]
-dummy_data[, Hb_A1C1 := Hb_A1C_splines[, 2]]
-dummy_data[, Hb_A1C2 := Hb_A1C_splines[, 3]]
-dummy_data[, albumin1 := albumin_splines[, 2]]
-```
+    dummy_data[, age1 := age_splines[, 2]]
+    dummy_data[, age2 := age_splines[, 3]]
+    dummy_data[, creatinine1 := creatinine_splines[, 2]]
+    dummy_data[, creatinine2 := creatinine_splines[, 3]]
+    dummy_data[, Hb_A1C1 := Hb_A1C_splines[, 2]]
+    dummy_data[, Hb_A1C2 := Hb_A1C_splines[, 3]]
+    dummy_data[, albumin1 := albumin_splines[, 2]]
 
 ## Performance metrics
 
 To obtain model performance metrics, we can use the
 `riskRegression::Score()` function:
 
-``` r
-t <- 365.25 # performance at 1 year
+    t <- 365.25 # performance at 1 year
 
-score_result <- Score(
-  list(cr_model = model),
-  data = dummy_data,
-  formula = Hist(time, status) ~ 1,
-  cause = 1,
-  times = t,
-  metrics = c("auc"),
-  summary = c("risks", "ipa"),
-  plots = c("ROC", "calibration"),
-  conf.int = TRUE
-)
-```
+    score_result <- Score(
+      list(cr_model = model),
+      data = dummy_data,
+      formula = Hist(time, status) ~ 1,
+      cause = 1,
+      times = t,
+      metrics = c("auc"),
+      summary = c("risks", "ipa"),
+      plots = c("ROC", "calibration"),
+      conf.int = TRUE
+    )
 
 ### AUROC
 
 To plot AUROC at 1 year, we can run `plotROC()` on the output returned
 by `Score()`:
 
-``` r
-plotROC(score_result,
-        times = 365.25,
-        ylab = paste0("Sensitivity at 1 year"),
-        xlab = paste0("1-Specificity at 1 year")
-)
-```
+    plotROC(score_result,
+            times = 365.25,
+            ylab = paste0("Sensitivity at 1 year"),
+            xlab = paste0("1-Specificity at 1 year")
+    )
 
-![](predict_risk_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](predict_risk_files/figure-markdown_strict/unnamed-chunk-17-1.png)
 
 ### Calibration
 
 Similarly, we can create a calibration plot based on the output of
 `Score()` by running `plotCalibration()`:
 
-``` r
-# calibration plot
-plotCalibration(
-  score_result,
-  method = "nne", # default
-  cens.method = "jackknife",
-  round = FALSE,
-  xlim = c(0, 0.05),
-  ylim = c(0, 0.05),
-  rug = TRUE
-)
-```
+    # calibration plot
+    plotCalibration(
+      score_result,
+      method = "nne", # default
+      cens.method = "jackknife",
+      round = FALSE,
+      xlim = c(0, 0.05),
+      ylim = c(0, 0.05),
+      rug = TRUE
+    )
 
-![](predict_risk_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](predict_risk_files/figure-markdown_strict/unnamed-chunk-18-1.png)
 
 Note that `plotCalibration()` does not provide an option for loess
 smoothing of the calibration curves. However, we can easily create
 loess-smoothed curves with additional customization based on the data
 returned by `Score()`:
 
-``` r
-obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
-pred <- score_result$Calibration$plotframe[times == t]$risk
+    obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
+    pred <- score_result$Calibration$plotframe[times == t]$risk
 
-# for plotting purposes, only include predicted scores within 99th percentile to ignore extreme/rare scores
-lim <- quantile(pred, 0.99)
+    # for plotting purposes, only include predicted scores within 99th percentile to ignore extreme/rare scores
+    lim <- quantile(pred, 0.99)
 
-# get density of predicted values
-d <- density(pred)
-d_scaled <- lim - (d$y / max(d$y) * (lim / 4))
-density_data <- data.frame(x = d$x, y = d_scaled)
+    # get density of predicted values
+    d <- density(pred)
+    d_scaled <- lim - (d$y / max(d$y) * (lim / 4))
+    density_data <- data.frame(x = d$x, y = d_scaled)
 
-# Use loess smoothing
-smooth_pseudos <- predict(
-  stats::loess(obs ~ pred, degree = 1, span = 2/3),
-  se = TRUE
-)
+    # Use loess smoothing
+    smooth_pseudos <- predict(
+      stats::loess(obs ~ pred, degree = 1, span = 2/3),
+      se = TRUE
+    )
 
-CI_lower <- smooth_pseudos$fit - qt(0.975, smooth_pseudos$df) * smooth_pseudos$se
-CI_upper <- smooth_pseudos$fit + qt(0.975, smooth_pseudos$df) * smooth_pseudos$se 
+    CI_lower <- smooth_pseudos$fit - qt(0.975, smooth_pseudos$df) * smooth_pseudos$se
+    CI_upper <- smooth_pseudos$fit + qt(0.975, smooth_pseudos$df) * smooth_pseudos$se 
 
-fig <- ggplot() +
-  geom_ribbon(aes(x = pred, y = obs, ymin = CI_lower, ymax = CI_upper), alpha = 0.3, fill = "darkblue") + 
-  geom_line(aes(x = pred, y = smooth_pseudos$fit), color = "darkblue") +
-  geom_abline(slope = 1, intercept = 0, color = "black", linetype = 2) +
-  geom_ribbon(data = density_data, aes(x = x, ymin = y, ymax = lim), alpha = 0.3) + 
-  geom_line(data = density_data, aes(x = x, y = y)) +
-  scale_x_continuous("Estimated risk at 1 year", expand = c(0, 0)) +
-  scale_y_continuous(paste0("Observed outcome proportions at 1 year"), expand = c(0, 0)) +
-  coord_cartesian(xlim = c(-0.001, lim), ylim = c(-0.001, lim)) +
-  theme_bw() +
-  theme(aspect.ratio = 1)
+    fig <- ggplot() +
+      geom_ribbon(aes(x = pred, y = obs, ymin = CI_lower, ymax = CI_upper), alpha = 0.3, fill = "darkblue") + 
+      geom_line(aes(x = pred, y = smooth_pseudos$fit), color = "darkblue") +
+      geom_abline(slope = 1, intercept = 0, color = "black", linetype = 2) +
+      geom_ribbon(data = density_data, aes(x = x, ymin = y, ymax = lim), alpha = 0.3) + 
+      geom_line(data = density_data, aes(x = x, y = y)) +
+      scale_x_continuous("Estimated risk at 1 year", expand = c(0, 0)) +
+      scale_y_continuous(paste0("Observed outcome proportions at 1 year"), expand = c(0, 0)) +
+      coord_cartesian(xlim = c(-0.001, lim), ylim = c(-0.001, lim)) +
+      theme_bw() +
+      theme(aspect.ratio = 1)
 
-print(fig)
-```
+    print(fig)
 
-![](predict_risk_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](predict_risk_files/figure-markdown_strict/unnamed-chunk-19-1.png)
+
+#### Calibration metrics
+
+Detailed code examples of how to obtain calibration metrics can be found
+in the [survival-lumc
+repository](https://github.com/survival-lumc/ValidationCompRisks) (also
+see [van Geloven et al.,
+2022](https://www.bmj.com/content/377/bmj-2021-069249).
+
+Here, we briefly demonstrate how to obtain calibration slope &
+intercept, ICI, and E50/E90.
+
+**Calibration slope**
+
+**Calibration intercept**
+
+**ICI**
+
+**E50/E90**
