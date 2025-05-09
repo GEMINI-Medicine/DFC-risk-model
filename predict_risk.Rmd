@@ -197,7 +197,7 @@ tab1 <- print(
 </details>
 
 ```{r echo=FALSE}
-knitr::kable(tab1, escape = FALSE)
+knitr::kable(tab1)
 ```
 
 
