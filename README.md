@@ -1,7 +1,8 @@
-# DFC-risk-model
 <!-- badges: start -->
 [![Tests](https://github.com/GEMINI-Medicine/DFC-risk-model/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/GEMINI-Medicine/DFC-risk-model/actions/workflows/run-tests.yaml)
 <!-- badges: end -->
+
+# DFC-risk-model
 
 Diabetes Foot Complications: Risk Prediction Model
 
