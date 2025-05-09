@@ -327,3 +327,42 @@ fig <- ggplot() +
 
 print(fig)
 ```
+
+
+#### Calibration metrics
+
+Detailed code examples of how to obtain calibration metrics can be found in the [survival-lumc repository](https://github.com/survival-lumc/ValidationCompRisks) (also see [van Geloven et al., 2022](https://www.bmj.com/content/377/bmj-2021-069249).
+
+Here, we briefly demonstrate how to obtain calibration slope & intercept, ICI, and E50/E90.
+
+**Calibration slope**
+
+```{r}
+
+
+```
+
+
+**Calibration intercept**
+
+```{r}
+
+
+```
+
+**ICI**
+
+```{r}
+
+
+```
+
+**E50/E90**
+
+```{r}
+
+
+```
+
+      
+
