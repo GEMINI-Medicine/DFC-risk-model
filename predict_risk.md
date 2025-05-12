@@ -14,11 +14,12 @@ libraries:
 
     library(data.table)
     library(dplyr)
+    library(geepack)
+    library(ggplot2)
+    library(prodlim)
     library(riskRegression)
     library(rms)
-    library(prodlim)
     library(tableone)
-    library(ggplot2)
 
 # Fine-Gray Regression (FGR) Model
 
@@ -615,19 +616,105 @@ returned by `Score()`:
 
 #### Calibration metrics
 
-Detailed code examples of how to obtain calibration metrics can be found
-in the [survival-lumc
+In addition to the calibration plot, we can evaluate calibration by
+calculating the calibration slope & intercept, integrated calibration
+index (ICI), and E50/E90 (50th/90th percentile of the absolute
+difference between observed vs. predicted values). The following code
+was adapted from the [survival-lumc
 repository](https://github.com/survival-lumc/ValidationCompRisks) (also
 see [van Geloven et al.,
-2022](https://www.bmj.com/content/377/bmj-2021-069249).
-
-Here, we briefly demonstrate how to obtain calibration slope &
-intercept, ICI, and E50/E90.
-
-**Calibration slope**
+2022](https://www.bmj.com/content/377/bmj-2021-069249)).
 
 **Calibration intercept**
 
-**ICI**
+To fit a model for the calibration intercept, we use a complementary
+log-log transformation of the predicted risk estimates and use
+generalized estimating equations (GEE) to obtain robust standard errors
+via jackknife resampling (used for pseudovalue estimation):
 
-**E50/E90**
+    # prepare data
+    data <- data.table(
+      pred = pred,
+      obs = obs,
+      cll_pred = log(-log(1 - pred)) # get cloglog predicted risk
+    )
+
+    # fit model for calibration intercept
+    fit_cal_int <- geese(
+      obs ~ offset(cll_pred),
+      data = data,
+      id = 1:nrow(data),
+      scale.fix = TRUE,
+      family = gaussian,
+      mean.link = "cloglog", # link function for the means: complementary log-log transformation
+      corstr = "independence",
+      jack = TRUE # SE's are estimated using jackknife resampling method
+    )
+
+    # get model summary
+    cal_int <- summary(fit_cal_int)$mean
+
+
+    # combine all
+    calibration_intercept <- data.table(
+      intercept = cal_int$estimate,
+      intercept_se = cal_int$san.se,
+      intercept_CI_lower = cal_int$estimate - qnorm(0.975) * cal_int$san.se,
+      intercept_CI_higher = cal_int$estimate + qnorm(0.975) * cal_int$san.se
+    )
+
+    print(calibration_intercept)
+
+    ##      intercept intercept_se intercept_CI_lower intercept_CI_higher
+    ##          <num>        <num>              <num>               <num>
+    ## 1: 0.003069739    0.1211431         -0.2343663           0.2405058
+
+**Calibration slope**
+
+    # Fit model for calibration slope
+    fit_cal_slope <- geese(
+      obs ~ offset(cll_pred) + cll_pred,
+      data = data,
+      id = 1:nrow(data),
+      scale.fix = TRUE,
+      family = gaussian,
+      mean.link = "cloglog",
+      corstr = "independence",
+      jack = TRUE
+    )
+
+    # get model summary
+    cal_slope <- summary(fit_cal_slope)$mean
+
+    # combine all
+    calibration_slope <- data.table(
+      slope = 1 + cal_slope["cll_pred", ]$estimate,
+      slope_se = cal_slope["cll_pred", ]$san.se,
+      slope_CI_lower = 1 + cal_slope["cll_pred", ]$estimate - qnorm(0.975) * cal_slope["cll_pred", ]$san.se,
+      slope_CI_higher = 1 + cal_slope["cll_pred", ]$estimate + qnorm(0.975) * cal_slope["cll_pred", ]$san.se
+    )
+
+
+    print(calibration_slope)
+
+    ##        slope  slope_se slope_CI_lower slope_CI_higher
+    ##        <num>     <num>          <num>           <num>
+    ## 1: 0.7231788 0.1783837      0.3735532        1.072804
+
+**ICI and E50/90**
+
+Finally, we calculate ICI and E50/E90 to obtain summary metrics of the
+difference between predicted vs. observed risk scores:
+
+    # get absolute prediction error
+    abs_pred_error <- abs(obs - pred)
+
+    ICI <- mean(abs(abs_pred_error))
+    E50 <- quantile(abs(abs_pred_error), c(0.5))
+    E90 <- quantile(abs(abs_pred_error), c(0.9))
+
+    ## [1] "ICI =  0.021"
+
+    ## [1] "E50 =  0.009"
+
+    ## [1] "E90 =  0.018"
