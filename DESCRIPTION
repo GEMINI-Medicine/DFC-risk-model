@@ -9,13 +9,15 @@ Encoding: UTF-8
 Imports:
 	data.table,
 	dplyr,
-	riskRegression,
 	prodlim,
+	riskRegression,
 	rms,
 	truncnorm
 Suggests: 
+	geepack,
+	ggplot2,
     knitr,
 	rmarkdown,
-	tableone,
-	ggplot2
+	tableone	
+	
 URL: https://github.com/GEMINI-Medicine/DFC-risk-model

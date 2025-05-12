@@ -10,7 +10,7 @@ output:
 ---
 
 # Overview
-  
+
 This file contains R code illustrating how to:
 
 1. Obtain all relevant model information (coefficients, hyperparameters etc.) from the model object saved in this repository.
@@ -31,11 +31,12 @@ To run the code below, please install and load the following R libraries:
 ```{r}
 library(data.table)
 library(dplyr)
+library(geepack)
+library(ggplot2)
+library(prodlim)
 library(riskRegression)
 library(rms)
-library(prodlim)
 library(tableone)
-library(ggplot2)
 ```
 
 
@@ -326,38 +327,98 @@ print(fig)
 
 #### Calibration metrics
 
-Detailed code examples of how to obtain calibration metrics can be found in the [survival-lumc repository](https://github.com/survival-lumc/ValidationCompRisks) (also see [van Geloven et al., 2022](https://www.bmj.com/content/377/bmj-2021-069249).
-
-Here, we briefly demonstrate how to obtain calibration slope & intercept, ICI, and E50/E90.
-
-**Calibration slope**
-
-```{r}
-
-
-```
+In addition to the calibration plot, we can evaluate calibration by calculating the calibration slope & intercept, integrated calibration index (ICI), and E50/E90 (50th/90th percentile of the absolute difference between observed vs. predicted values).
+The following code was adapted from the [survival-lumc repository](https://github.com/survival-lumc/ValidationCompRisks) (also see [van Geloven et al., 2022](https://www.bmj.com/content/377/bmj-2021-069249)).
 
 
 **Calibration intercept**
 
-```{r}
-
-
-```
-
-**ICI**
+To fit a model for the calibration intercept, we use a complementary log-log transformation of the predicted risk estimates and use generalized estimating equations (GEE) to obtain robust standard errors via jackknife resampling (used for pseudovalue estimation):
 
 ```{r}
+# prepare data
+data <- data.table(
+  pred = pred,
+  obs = obs,
+  cll_pred = log(-log(1 - pred)) # get cloglog predicted risk
+)
+
+# fit model for calibration intercept
+fit_cal_int <- geese(
+  obs ~ offset(cll_pred),
+  data = data,
+  id = 1:nrow(data),
+  scale.fix = TRUE,
+  family = gaussian,
+  mean.link = "cloglog", # link function for the means: complementary log-log transformation
+  corstr = "independence",
+  jack = TRUE # SE's are estimated using jackknife resampling method
+)
+
+# get model summary
+cal_int <- summary(fit_cal_int)$mean
 
 
+# combine all
+calibration_intercept <- data.table(
+  intercept = cal_int$estimate,
+  intercept_se = cal_int$san.se,
+  intercept_CI_lower = cal_int$estimate - qnorm(0.975) * cal_int$san.se,
+  intercept_CI_higher = cal_int$estimate + qnorm(0.975) * cal_int$san.se
+)
+
+print(calibration_intercept)
 ```
 
-**E50/E90**
+
+**Calibration slope**
 
 ```{r}
+# Fit model for calibration slope
+fit_cal_slope <- geese(
+  obs ~ offset(cll_pred) + cll_pred,
+  data = data,
+  id = 1:nrow(data),
+  scale.fix = TRUE,
+  family = gaussian,
+  mean.link = "cloglog",
+  corstr = "independence",
+  jack = TRUE
+)
+
+# get model summary
+cal_slope <- summary(fit_cal_slope)$mean
+
+# combine all
+calibration_slope <- data.table(
+  slope = 1 + cal_slope["cll_pred", ]$estimate,
+  slope_se = cal_slope["cll_pred", ]$san.se,
+  slope_CI_lower = 1 + cal_slope["cll_pred", ]$estimate - qnorm(0.975) * cal_slope["cll_pred", ]$san.se,
+  slope_CI_higher = 1 + cal_slope["cll_pred", ]$estimate + qnorm(0.975) * cal_slope["cll_pred", ]$san.se
+)
 
 
+print(calibration_slope)
 ```
 
-      
+**ICI and E50/90**
+
+Finally, we calculate ICI and E50/E90 to obtain summary metrics of the difference between predicted vs. observed risk scores:
+
+```{r}
+# get absolute prediction error
+abs_pred_error <- abs(obs - pred)
+
+ICI <- mean(abs(abs_pred_error))
+E50 <- quantile(abs(abs_pred_error), c(0.5))
+E90 <- quantile(abs(abs_pred_error), c(0.9))
+```
+
+```{r echo = FALSE}
+print(paste("ICI = ", round(ICI, 3)))
+print(paste("E50 = ", round(E50, 3)))
+print(paste("E90 = ", round(E90, 3)))
+```
+
+
 
