@@ -4,7 +4,7 @@ always_allow_html: true
 output:
   github_document:
     toc: true
-    toc_depth: 5
+    toc_depth: 3
   keep_text: true
   pandoc_args: --webtex
 ---
@@ -68,9 +68,19 @@ The model object can be used to generate predicted risk scores on new data (and 
 **For more information on relevant predictor variables and how they are defined, please carefully review the data dictionary in `data/data_dictionary.csv`.**
 <details><summary>Expand this section to review the data dictionary</summary>
 
+#### Outcomes
+
 ```{r echo = FALSE}
-data_dictionary <- read.csv("data/data_dictionary.csv")
-knitr::kable(data_dictionary)
+data_dictionary <- read.csv("data/data_dictionary.csv") %>%
+  data.table()
+
+knitr::kable(data_dictionary[modelvar == "outcome", -("modelvar")])
+```
+
+#### Predictors
+
+```{r echo = FALSE}
+knitr::kable(data_dictionary[modelvar == "predictor", -("modelvar")])
 ```
 
 </details>
@@ -292,8 +302,8 @@ Note that `plotCalibration()` does not provide an option for loess smoothing of 
 obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
 pred <- score_result$Calibration$plotframe[times == t]$risk
 
-# for plotting purposes, only include predicted scores within 99th percentile to ignore extreme/rare scores
-lim <- quantile(pred, 0.99)
+# for plotting purposes, only include predicted scores within 99.9th percentile
+lim <- quantile(pred, 0.999)
 
 # get density of predicted values
 d <- density(pred)
@@ -302,7 +312,7 @@ density_data <- data.frame(x = d$x, y = d_scaled)
 
 # Use loess smoothing
 smooth_pseudos <- predict(
-  stats::loess(obs ~ pred, degree = 1, span = 2/3),
+  stats::loess(obs ~ pred, degree = 1, span = 2 / 3),
   se = TRUE
 )
 
@@ -327,11 +337,11 @@ print(fig)
 
 #### Calibration metrics
 
-In addition to the calibration plot, we can evaluate calibration by calculating the calibration slope & intercept, integrated calibration index (ICI), and E50/E90 (50th/90th percentile of the absolute difference between observed vs. predicted values).
+In addition to the calibration plot, we can evaluate calibration by calculating the calibration slope & intercept, integrated calibration index (ICI), and E50/E90 (50th/90th percentile of the absolute prediction error).
 The following code was adapted from the [survival-lumc repository](https://github.com/survival-lumc/ValidationCompRisks) (also see [van Geloven et al., 2022](https://www.bmj.com/content/377/bmj-2021-069249)).
 
 
-**Calibration intercept**
+**Calibration slope**
 
 To fit a model for the calibration intercept, we use a complementary log-log transformation of the predicted risk estimates and use generalized estimating equations (GEE) to obtain robust standard errors via jackknife resampling (used for pseudovalue estimation):
 
@@ -340,12 +350,44 @@ To fit a model for the calibration intercept, we use a complementary log-log tra
 data <- data.table(
   pred = pred,
   obs = obs,
-  cll_pred = log(-log(1 - pred)) # get cloglog predicted risk
+  pred_cll = log(-log(1 - pred)) # get cloglog predicted risk
 )
 
+# Fit model for calibration slope
+fit_cal_slope <- geese(
+  obs ~ offset(pred_cll) + pred_cll,
+  data = data,
+  id = 1:nrow(data),
+  scale.fix = TRUE,
+  family = gaussian,
+  mean.link = "cloglog",
+  corstr = "independence",
+  jack = TRUE
+)
+
+# get model summary
+cal_slope <- summary(fit_cal_slope)$mean
+
+# combine all
+calibration_slope <- data.table(
+  slope = 1 + cal_slope["pred_cll", ]$estimate,
+  slope_SE = cal_slope["pred_cll", ]$san.se,
+  slope_CI_lower = 1 + cal_slope["pred_cll", ]$estimate - qnorm(0.975) * cal_slope["pred_cll", ]$san.se,
+  slope_CI_upper = 1 + cal_slope["pred_cll", ]$estimate + qnorm(0.975) * cal_slope["pred_cll", ]$san.se
+)
+
+print(calibration_slope)
+```
+
+
+**Calibration intercept**
+
+To get the calibration intercept, we use the same model as above, but fix the slope to 1. This will tell us to what extend the model generally over-/underestimates risk scores:
+
+```{r}
 # fit model for calibration intercept
 fit_cal_int <- geese(
-  obs ~ offset(cll_pred),
+  obs ~ offset(pred_cll),
   data = data,
   id = 1:nrow(data),
   scale.fix = TRUE,
@@ -364,41 +406,10 @@ calibration_intercept <- data.table(
   intercept = cal_int$estimate,
   intercept_se = cal_int$san.se,
   intercept_CI_lower = cal_int$estimate - qnorm(0.975) * cal_int$san.se,
-  intercept_CI_higher = cal_int$estimate + qnorm(0.975) * cal_int$san.se
+  intercept_CI_upper = cal_int$estimate + qnorm(0.975) * cal_int$san.se
 )
 
 print(calibration_intercept)
-```
-
-
-**Calibration slope**
-
-```{r}
-# Fit model for calibration slope
-fit_cal_slope <- geese(
-  obs ~ offset(cll_pred) + cll_pred,
-  data = data,
-  id = 1:nrow(data),
-  scale.fix = TRUE,
-  family = gaussian,
-  mean.link = "cloglog",
-  corstr = "independence",
-  jack = TRUE
-)
-
-# get model summary
-cal_slope <- summary(fit_cal_slope)$mean
-
-# combine all
-calibration_slope <- data.table(
-  slope = 1 + cal_slope["cll_pred", ]$estimate,
-  slope_se = cal_slope["cll_pred", ]$san.se,
-  slope_CI_lower = 1 + cal_slope["cll_pred", ]$estimate - qnorm(0.975) * cal_slope["cll_pred", ]$san.se,
-  slope_CI_higher = 1 + cal_slope["cll_pred", ]$estimate + qnorm(0.975) * cal_slope["cll_pred", ]$san.se
-)
-
-
-print(calibration_slope)
 ```
 
 **ICI and E50/90**
