@@ -520,6 +520,7 @@ print(calibration_intercept)
     ##      intercept intercept_se intercept_CI_lower intercept_CI_upper
     ## 1: 0.003069739    0.1211431         -0.2343663          0.2405058
 
+
 **ICI and E50/90**
 
 Finally, we calculate ICI and E50/E90 to obtain summary metrics of the
