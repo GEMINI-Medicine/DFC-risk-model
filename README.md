@@ -26,13 +26,13 @@ Predictor variables were selected a priori and include patient-level characteris
 
 Restricted cubic splines were used to relax linearity assumptions for continuous predictors (age, hemoglobin A1C, creatinine, and albumin).
 The number of knots for each variable (max. 5) was treated as a hyperparameter and was selected based on a nested internal-external cross-validation approach.
-Knot locations for the optimized splines can be found in the model object (see `models/final_FGR_clean.rds`).
+Knot locations for the optimized splines can be found in the model object (see `model/final_FGR_clean.rds`).
 
 
 ## Repository Content
 
 1) **Model object**: 
-	- `models/final_FGR_clean.rds` contains the final FGR model including model formula, optimized coefficients, and spline knot locations
+	- `model/final_FGR_clean.rds` contains the final FGR model including model formula, optimized coefficients, and spline knot locations
 2) **Data**:
 	- `data/data_dictionary.csv` provides a detailed overview of all predictor and outcome variables
 	- `data/dummy_data.rds` contains randomly generated dummy data that can be used for testing purposes
