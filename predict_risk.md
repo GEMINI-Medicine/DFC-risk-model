@@ -405,7 +405,6 @@ Show code
     tab1 <- print(
       tab1,
       nonnormal = c("age", "Hb_A1C", "creatinine", "albumin"),
-      includeNA = TRUE,
       showAllLevels = FALSE,
       printToggle = FALSE
     )
@@ -530,7 +529,8 @@ in the validated model:
 To obtain model performance metrics, we can use the
 `riskRegression::Score()` function:
 
-    t <- 365.25 # performance at 1 year
+    # get performance at 1 year
+    t <- 365.25
 
     score_result <- Score(
       list(cr_model = model),
@@ -550,7 +550,7 @@ To plot AUROC at 1 year, we can run `plotROC()` on the output returned
 by `Score()`:
 
     plotROC(score_result,
-      times = 365.25,
+      times = t,
       ylab = paste0("Sensitivity at 1 year"),
       xlab = paste0("1-Specificity at 1 year")
     )
@@ -565,7 +565,7 @@ Similarly, we can create a calibration plot based on the output of
     # calibration plot
     plotCalibration(
       score_result,
-      method = "nne", # default
+      method = "nne", # default: nearest neighborhood smoothing
       cens.method = "jackknife",
       round = FALSE,
       xlim = c(0, 0.05),
@@ -580,6 +580,7 @@ smoothing of the calibration curves. However, we can easily create
 loess-smoothed curves with additional customization based on the data
 returned by `Score()`:
 
+    # get predicted/observed values at 1 year
     obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
     pred <- score_result$Calibration$plotframe[times == t]$risk
 
@@ -591,7 +592,7 @@ returned by `Score()`:
     d_scaled <- lim - (d$y / max(d$y) * (lim / 4))
     density_data <- data.frame(x = d$x, y = d_scaled)
 
-    # Use loess smoothing
+    # use loess smoothing
     smooth_pseudos <- predict(
       stats::loess(obs ~ pred, degree = 1, span = 2 / 3),
       se = TRUE
@@ -641,7 +642,7 @@ jackknife resampling (used for pseudovalue estimation):
       pred_cll = log(-log(1 - pred)) # get cloglog of predicted risk
     )
 
-    # Fit model for calibration slope
+    # fit model for calibration slope
     fit_cal_slope <- geese(
       obs ~ offset(pred_cll) + pred_cll,
       data = data,
@@ -690,7 +691,6 @@ over-/underestimates risk scores:
 
     # get model summary
     cal_int <- summary(fit_cal_int)$mean
-
 
     # combine all
     calibration_intercept <- data.table(
