@@ -22,7 +22,8 @@ This file contains R code illustrating how to:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE, warning = FALSE, message = FALSE,
-  fig.width = 5, fig.height = 5
+  fig.width = 5, fig.height = 5,
+  fig.path = "figs/"
 )
 ```
 
