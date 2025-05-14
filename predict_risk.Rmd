@@ -201,7 +201,6 @@ tab1 <- CreateTableOne(vars = c(
 tab1 <- print(
   tab1,
   nonnormal = c("age", "Hb_A1C", "creatinine", "albumin"),
-  includeNA = TRUE,
   showAllLevels = FALSE,
   printToggle = FALSE
 )
@@ -209,7 +208,7 @@ tab1 <- print(
 </details>
 
 ```{r echo=FALSE}
-# Remove extra space after parentheses
+# remove extra space after parentheses
 tab1 <- apply(tab1, 2, function(col) {
   gsub("\\(\\s*(\\d)", "(\\1", col)
 })
@@ -256,14 +255,12 @@ dummy_data[, albumin1 := albumin_splines[, 2]]
 To obtain model performance metrics, we can use the `riskRegression::Score()` function:
 
 ```{r, results='hide'}
-t <- 365.25 # performance at 1 year
-
 score_result <- Score(
   list(cr_model = model),
   data = dummy_data,
   formula = Hist(time, status) ~ 1,
   cause = 1,
-  times = t,
+  times = 365.25, # performance at 1 year
   metrics = c("auc"),
   summary = c("risks", "ipa"),
   plots = c("ROC", "calibration"),
@@ -291,7 +288,7 @@ Similarly, we can create a calibration plot based on the output of `Score()` by 
 # calibration plot
 plotCalibration(
   score_result,
-  method = "nne", # default
+  method = "nne", # default: nearest neighborhood smoothing
   cens.method = "jackknife",
   round = FALSE,
   xlim = c(0, 0.05),
