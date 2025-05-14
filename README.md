@@ -18,15 +18,9 @@ Here, we share the model object, dummy data, and R code allowing users to genera
 
 ## Fine-Gray Regression
 
-Briefly, the FGR model reported here estimates the cumulative incidence function (CIF) for diabetic foot complications while accounting for the competing risk of death.
+Briefly, the FGR model reported here estimates the cumulative incidence function (CIF) for diabetic foot complications while accounting for the competing risk of death. FGR is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF ([Fine & Gray, 1997](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144)).
 
-FGR is a semi-parametric regression approach that directly models the subdistribution hazard, enabling interpretation of covariate effects on the CIF ([Fine & Gray, 1997](https://www.tandfonline.com/doi/abs/10.1080/01621459.1999.10474144)).
-
-Predictor variables were selected a priori and include patient-level characteristics like age, sex, admission urgency, comorbidities, homelessness, and lab results (see [here](/data/data_dictionary.csv) for a complete list).
-
-Restricted cubic splines were used to relax linearity assumptions for continuous predictors (age, hemoglobin A1C, creatinine, and albumin).
-The number of knots for each variable (max. 5) was treated as a hyperparameter and was selected based on a nested internal-external cross-validation approach.
-Knot locations for the optimized splines can be found in the model object (see `model/final_FGR_clean.rds`).
+Predictor variables were selected a priori and include patient-level characteristics like age, sex, admission urgency, comorbidities, homelessness, and lab results (see [here](/data/data_dictionary.csv) for a complete list). Restricted cubic splines were used to relax linearity assumptions for continuous predictors (age, hemoglobin A1C, creatinine, and albumin). The number of knots for each variable (max. 5) was treated as a hyperparameter and was selected based on a nested internal-external cross-validation approach. Knot locations for the optimized splines can be found in the model object (see `model/final_FGR_clean.rds`).
 
 
 ## Repository Content
@@ -36,7 +30,7 @@ Knot locations for the optimized splines can be found in the model object (see `
 2) **Data**:
 	- `data/data_dictionary.csv` provides a detailed overview of all predictor and outcome variables
 	- `data/dummy_data.rds` contains randomly generated dummy data that can be used for testing purposes
-	- Note: Due to patient privacy concerns, we are not able to share the original training data in this repository. A description of the cohort used for model training can be found in Roberts & Loeffler et al. (in preparation).
+	- Note: To protect patient privacy, we are not able to share the original training data in this repository. A description of the cohort used for model training can be found in Roberts & Loeffler et al. (in preparation).
 3) **R demo code**
 	- [predict_risk.md](predict_risk.md) contains a brief demo illustrating how to load the model object, generate predictions on new data, and evaluate model performance. 
 
@@ -48,4 +42,4 @@ Roberts & Loeffler et al. (in preparation). Development, internal-external valid
 
 ## Contact
 
-If you have any questions about the methods or data reported in this repository, please [open an issue](https://github.com/GEMINI-Medicine/diabetes-larp/issues) or contact Gemini.Data@unityhealth.to.
+If you have any questions about the content of this repository, please [open an issue](https://github.com/GEMINI-Medicine/diabetes-larp/issues) or contact Gemini.Data@unityhealth.to.
