@@ -629,16 +629,16 @@ see [van Geloven et al.,
 
 **Calibration slope**
 
-To fit a model for the calibration intercept, we use a complementary
-log-log transformation of the predicted risk estimates and use
-generalized estimating equations (GEE) to obtain robust standard errors
-via jackknife resampling (used for pseudovalue estimation):
+To fit a model for the calibration slope, we use a complementary log-log
+transformation of the predicted risk estimates and use generalized
+estimating equations (GEE) to obtain robust standard errors via
+jackknife resampling (used for pseudovalue estimation):
 
     # prepare data
     data <- data.table(
       pred = pred,
       obs = obs,
-      pred_cll = log(-log(1 - pred)) # get cloglog predicted risk
+      pred_cll = log(-log(1 - pred)) # get cloglog of predicted risk
     )
 
     # Fit model for calibration slope
