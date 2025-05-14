@@ -14,7 +14,7 @@ output:
 This file contains R code illustrating how to:
 
 1. Obtain all relevant model information (coefficients, hyperparameters etc.) from the model object saved in this repository.
-2. Use the model objects to generate predictions on new test data.
+2. Use the model object to generate predictions on new test data.
 3. Assess model performance on the new test data.
 
 # Set-up 
