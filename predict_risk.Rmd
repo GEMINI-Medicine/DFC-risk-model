@@ -255,12 +255,15 @@ dummy_data[, albumin1 := albumin_splines[, 2]]
 To obtain model performance metrics, we can use the `riskRegression::Score()` function:
 
 ```{r, results='hide'}
+# get performance at 1 year
+t <- 365.25
+
 score_result <- Score(
   list(cr_model = model),
   data = dummy_data,
   formula = Hist(time, status) ~ 1,
   cause = 1,
-  times = 365.25, # performance at 1 year
+  times = t,
   metrics = c("auc"),
   summary = c("risks", "ipa"),
   plots = c("ROC", "calibration"),
@@ -274,7 +277,7 @@ To plot AUROC at 1 year, we can run `plotROC()` on the output returned by `Score
 
 ```{r}
 plotROC(score_result,
-  times = 365.25,
+  times = t,
   ylab = paste0("Sensitivity at 1 year"),
   xlab = paste0("1-Specificity at 1 year")
 )
@@ -301,6 +304,7 @@ plotCalibration(
 Note that `plotCalibration()` does not provide an option for loess smoothing of the calibration curves. However, we can easily create loess-smoothed curves with additional customization based on the data returned by `Score()`:
 
 ```{r}
+# get predicted/observed values at 1 year
 obs <- score_result$Calibration$plotframe[times == t]$pseudovalue
 pred <- score_result$Calibration$plotframe[times == t]$risk
 
@@ -312,7 +316,7 @@ d <- density(pred)
 d_scaled <- lim - (d$y / max(d$y) * (lim / 4))
 density_data <- data.frame(x = d$x, y = d_scaled)
 
-# Use loess smoothing
+# use loess smoothing
 smooth_pseudos <- predict(
   stats::loess(obs ~ pred, degree = 1, span = 2 / 3),
   se = TRUE
@@ -355,7 +359,7 @@ data <- data.table(
   pred_cll = log(-log(1 - pred)) # get cloglog of predicted risk
 )
 
-# Fit model for calibration slope
+# fit model for calibration slope
 fit_cal_slope <- geese(
   obs ~ offset(pred_cll) + pred_cll,
   data = data,
@@ -401,7 +405,6 @@ fit_cal_int <- geese(
 
 # get model summary
 cal_int <- summary(fit_cal_int)$mean
-
 
 # combine all
 calibration_intercept <- data.table(
