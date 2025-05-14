@@ -288,7 +288,7 @@ hospitalization</td>
 
 Let’s create some new data from a single (hypothetical) patient:
 
-    # create data for a single patient  
+    # create data for a single patient
     new_data <- data.frame(
       age = 67,
       sex_f = 1,
@@ -311,20 +311,18 @@ Let’s create some new data from a single (hypothetical) patient:
       albumin_missing = 0
     )
 
-Crucially, for the FGR model, continuous variables (age, hemoglobin A1C,
-creatinine, and albumin) were modelled using restricted cubic splines.
-which we additionally need to derive the non-linear components for each
-continuous predictor . We can use the knot locations stored in the `FGR`
-model object to achieve this:
+Crucially, in our FGR model, continuous variables (age, hemoglobin A1C,
+creatinine, and albumin) were modeled using restricted cubic splines. We
+therefore need to derive the spline basis functions based on the knot
+locations stored in the `FGR` model object:
 
-    ## this is only relevant for the FGR model
-    # derive non-linear splines based on knot locations
+    # derive splines based on knot locations
     age_splines <- rcs(new_data$age, model$splines$age_knots)
     creatinine_splines <- rcs(new_data$creatinine, model$splines$creatinine_knots)
     Hb_A1C_splines <- rcs(new_data$Hb_A1C, model$splines$hba1c_knots)
     albumin_splines <- rcs(new_data$albumin, model$splines$albumin_knots)
 
-    # add non-linear components to new_data
+    # add spline terms to new_data
     new_data$age1 <- age_splines[, 2]
     new_data$age2 <- age_splines[, 3]
     new_data$creatinine1 <- creatinine_splines[, 2]
@@ -372,8 +370,8 @@ We’ll use some (randomly generated) dummy data here to illustrate how
 you can obtain AUROC and calibration metrics reported in Roberts &
 Loeffler et al. (in preparation):
 
-    #dummy_data <- simulate_data(n = 10000, save_data = TRUE)
-    dummy_data <- readRDS("data/dummy_data.rds")
+    # dummy data generated with /data/simulate_data.R
+    dummy_data <- readRDS("data/dummy_data.rds") 
 
 ## Data pre-processing
 
@@ -385,22 +383,23 @@ reported by Roberts & Loeffler et al.:
 Show code
 </summary>
 
-    tab1 <- CreateTableOne(vars = c("age",
-                                    "sex_f",
-                                    "elective_adm",
-                                    "peripheral_AD",
-                                    "coronary_AD",
-                                    "stroke",
-                                    "CHF",
-                                    "hypertension",
-                                    "COPD",
-                                    "CKD",
-                                    "malignancy",
-                                    "mental_illness",
-                                    "homelessness",
-                                    "Hb_A1C",
-                                    "creatinine",
-                                    "albumin"
+    tab1 <- CreateTableOne(vars = c(
+      "age",
+      "sex_f",
+      "elective_adm",
+      "peripheral_AD",
+      "coronary_AD",
+      "stroke",
+      "CHF",
+      "hypertension",
+      "COPD",
+      "CKD",
+      "malignancy",
+      "mental_illness",
+      "homelessness",
+      "Hb_A1C",
+      "creatinine",
+      "albumin"
     ), data = dummy_data)
 
     tab1 <- print(
@@ -509,11 +508,10 @@ to 0:
     dummy_data[is.na(creatinine), creatinine := 0]
     dummy_data[is.na(albumin), albumin := 0]
 
-Additionally, we again need to add the non-linear components. Here, we
-are applying the same knot locations that were used in the validated
-model:
+Additionally, we again need to add the spline terms for each continuous
+variable. Here, we are applying the same knot locations that were used
+in the validated model:
 
-    # add non-linear components to new_data
     age_splines <- rcs(dummy_data$age, model$splines$age_knots)
     creatinine_splines <- rcs(dummy_data$creatinine, model$splines$creatinine_knots)
     Hb_A1C_splines <- rcs(dummy_data$Hb_A1C, model$splines$hba1c_knots)
@@ -552,9 +550,9 @@ To plot AUROC at 1 year, we can run `plotROC()` on the output returned
 by `Score()`:
 
     plotROC(score_result,
-            times = 365.25,
-            ylab = paste0("Sensitivity at 1 year"),
-            xlab = paste0("1-Specificity at 1 year")
+      times = 365.25,
+      ylab = paste0("Sensitivity at 1 year"),
+      xlab = paste0("1-Specificity at 1 year")
     )
 
 ![](predict_risk_files/figure-markdown_strict/unnamed-chunk-18-1.png)
@@ -600,13 +598,13 @@ returned by `Score()`:
     )
 
     CI_lower <- smooth_pseudos$fit - qt(0.975, smooth_pseudos$df) * smooth_pseudos$se
-    CI_upper <- smooth_pseudos$fit + qt(0.975, smooth_pseudos$df) * smooth_pseudos$se 
+    CI_upper <- smooth_pseudos$fit + qt(0.975, smooth_pseudos$df) * smooth_pseudos$se
 
     fig <- ggplot() +
-      geom_ribbon(aes(x = pred, y = obs, ymin = CI_lower, ymax = CI_upper), alpha = 0.3, fill = "darkblue") + 
+      geom_ribbon(aes(x = pred, y = obs, ymin = CI_lower, ymax = CI_upper), alpha = 0.3, fill = "darkblue") +
       geom_line(aes(x = pred, y = smooth_pseudos$fit), color = "darkblue") +
       geom_abline(slope = 1, intercept = 0, color = "black", linetype = 2) +
-      geom_ribbon(data = density_data, aes(x = x, ymin = y, ymax = lim), alpha = 0.3) + 
+      geom_ribbon(data = density_data, aes(x = x, ymin = y, ymax = lim), alpha = 0.3) +
       geom_line(data = density_data, aes(x = x, y = y)) +
       scale_x_continuous("Estimated risk at 1 year", expand = c(0, 0)) +
       scale_y_continuous(paste0("Observed outcome proportions at 1 year"), expand = c(0, 0)) +
@@ -650,9 +648,9 @@ via jackknife resampling (used for pseudovalue estimation):
       id = 1:nrow(data),
       scale.fix = TRUE,
       family = gaussian,
-      mean.link = "cloglog",
+      mean.link = "cloglog", # link function for the means: complementary log-log transformation
       corstr = "independence",
-      jack = TRUE
+      jack = TRUE # SE's are estimated using jackknife resampling method
     )
 
     # get model summary
@@ -685,9 +683,9 @@ over-/underestimates risk scores:
       id = 1:nrow(data),
       scale.fix = TRUE,
       family = gaussian,
-      mean.link = "cloglog", # link function for the means: complementary log-log transformation
+      mean.link = "cloglog",
       corstr = "independence",
-      jack = TRUE # SE's are estimated using jackknife resampling method
+      jack = TRUE
     )
 
     # get model summary
