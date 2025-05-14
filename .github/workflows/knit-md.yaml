@@ -32,7 +32,7 @@ jobs:
           
       - name: Install dependencies
         run: |
-          R -e "install.packages('remotes', repos = 'https://cran.r-project.org', output_dir = "figs)"
+          R -e "install.packages('remotes', repos = 'https://cran.r-project.org', output_dir = 'figs')"
           R -e "remotes::install_deps(dependencies = TRUE)"
 
       - name: Knit Rmd to md
