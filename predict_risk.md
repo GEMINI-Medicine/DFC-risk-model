@@ -274,17 +274,17 @@ tab1 <- print(
 | n                           | 10000                  |
 | age (median \[IQR\])        | 69.56 \[59.92, 79.92\] |
 | sex_f = TRUE (%)            | 4950 (49.5)            |
-| elective_adm = TRUE (%)     | 201 ( 2.0)             |
-| peripheral_AD = TRUE (%)    | 101 ( 1.0)             |
+| elective_adm = TRUE (%)     | 201 (2.0)              |
+| peripheral_AD = TRUE (%)    | 101 (1.0)              |
 | coronary_AD = TRUE (%)      | 1231 (12.3)            |
-| stroke = TRUE (%)           | 490 ( 4.9)             |
+| stroke = TRUE (%)           | 490 (4.9)              |
 | CHF = TRUE (%)              | 1293 (12.9)            |
 | hypertension = TRUE (%)     | 4475 (44.8)            |
-| COPD = TRUE (%)             | 570 ( 5.7)             |
-| CKD = TRUE (%)              | 388 ( 3.9)             |
+| COPD = TRUE (%)             | 570 (5.7)              |
+| CKD = TRUE (%)              | 388 (3.9)              |
 | malignancy = TRUE (%)       | 1098 (11.0)            |
-| mental_illness = TRUE (%)   | 700 ( 7.0)             |
-| homelessness = TRUE (%)     | 52 ( 0.5)              |
+| mental_illness = TRUE (%)   | 700 (7.0)              |
+| homelessness = TRUE (%)     | 52 (0.5)               |
 | Hb_A1C (median \[IQR\])     | 7.69 \[6.60, 8.93\]    |
 | creatinine (median \[IQR\]) | 79.82 \[66.56, 93.13\] |
 | albumin (median \[IQR\])    | 30.36 \[23.71, 36.85\] |

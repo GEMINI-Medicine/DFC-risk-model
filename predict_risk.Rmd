@@ -209,6 +209,11 @@ tab1 <- print(
 </details>
 
 ```{r echo=FALSE}
+# Remove extra space after parentheses
+tab1 <- apply(tab1, 2, function(col) {
+  gsub("\\(\\s*(\\d)", "(\\1", col)
+})
+
 knitr::kable(tab1)
 ```
 
