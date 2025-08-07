@@ -83,7 +83,6 @@ knitr::kable(data_dictionary[modelvar == "outcome", -("modelvar")])
 ```{r echo = FALSE}
 knitr::kable(data_dictionary[modelvar == "predictor", -("modelvar")])
 ```
-
 </details>
 <br>
 
