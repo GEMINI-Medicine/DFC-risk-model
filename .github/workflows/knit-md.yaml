@@ -37,6 +37,7 @@ jobs:
           R -e "remotes::install_version('riskRegression', version = '2023.12.21', repos = 'https://cran.r-project.org')"
 
 
+
       - name: Knit Rmd to md
         run: rmarkdown::render("predict_risk.Rmd", output_format = "md_document")
         shell: Rscript {0}

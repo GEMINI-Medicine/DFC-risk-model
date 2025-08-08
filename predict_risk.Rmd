@@ -17,7 +17,7 @@ This file contains R code illustrating how to:
 2. Use the model object to generate predictions on new test data.
 3. Assess model performance on the new test data.
 
-# Set-up 
+# Set-up
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-To run the code below, please install and load the following R libraries:
+To run the code below, please install and load the following R libraries. To use the same package versions that were used for model development, please see s[Session Info](#session) below:
 
 ```{r}
 library(data.table)
@@ -434,4 +434,10 @@ E90 <- quantile(abs(abs_pred_error), c(0.9))
 print(paste("ICI = ", round(ICI, 3)))
 print(paste("E50 = ", round(E50, 3)))
 print(paste("E90 = ", round(E90, 3)))
+```
+
+# Session Info {#session}
+
+```{r}
+print(sessionInfo())
 ```
