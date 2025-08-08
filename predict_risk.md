@@ -11,7 +11,8 @@ This file contains R code illustrating how to:
 
 To run the code below, please install and load the following R
 libraries. To use the same package versions that were used for model
-development, please see [Session Info](#session) below:
+development, please see [Session Info](#session-info) at the end of this
+document:
 
     library(data.table)
     library(dplyr)
