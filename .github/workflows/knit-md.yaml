@@ -32,6 +32,7 @@ jobs:
           
       - name: Install dependencies (respect pinned versions)
         run: |
+          Rscript -e "options(repos = c(CRAN='https://cran.r-project.org', CRANextra='https://cran.r-project.org/src/contrib/Archive')); install.packages('remotes')"
           Rscript -e "install.packages('remotes', repos = 'https://cran.r-project.org')"
           # Fail early if DESCRIPTION is missing
           Rscript -e "if (!file.exists('DESCRIPTION')) stop('DESCRIPTION file is missing')"
