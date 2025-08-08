@@ -1,3 +1,5 @@
+# Table of contents
+
 -   [Overview](#overview)
 -   [Set-up](#set-up)
 -   [Fine-Gray Regression (FGR)
@@ -12,9 +14,6 @@
         -   [Calibration](#calibration)
             -   [Calibration metrics](#calibration-metrics)
 -   [Session Info](#session-info)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table
-of contents generated with markdown-toc</a></i></small>
 
 # Overview
 
