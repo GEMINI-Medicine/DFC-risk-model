@@ -57,6 +57,7 @@ data (and subsequently evaluate model performance - see section below).
 **For more information on relevant predictor variables and how they are
 defined, please carefully review the data dictionary in
 `data/data_dictionary.csv`.**
+
 <details>
 <summary>
 Expand this section to review the data dictionary
