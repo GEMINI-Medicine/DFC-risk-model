@@ -6,9 +6,8 @@ output:
     toc: true
     toc_depth: 3
     keep_md: true
-    pandoc_args: ["--webtex", "--toc"]
+    pandoc_args: ["--webtex"]
 ---
-
 
 # Overview
 
