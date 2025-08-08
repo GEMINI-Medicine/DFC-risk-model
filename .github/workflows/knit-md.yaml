@@ -30,10 +30,15 @@ jobs:
       - name: Set up Pandoc
         uses: r-lib/actions/setup-pandoc@v2
           
-      - name: Install dependencies
+      - name: Install dependencies (respect pinned versions)
         run: |
-          R -e "install.packages('remotes', repos = 'https://cran.r-project.org', output_dir = 'figs')"
-          R -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "install.packages('remotes', repos = 'https://cran.r-project.org')"
+          # Fail early if DESCRIPTION is missing
+          Rscript -e "if (!file.exists('DESCRIPTION')) stop('DESCRIPTION file is missing')"
+          # Install exactly as pinned in DESCRIPTION
+          Rscript -e "remotes::install_deps(dependencies = TRUE, upgrade = 'never')"
+          # Verify installed versions match DESCRIPTION
+          Rscript -e "remotes::dev_package_deps(dependencies = TRUE) -> deps; if (any(deps$diff != 'OK')) { print(deps); stop('Package version mismatch detected') }"
 
       - name: Knit Rmd to md
         run: rmarkdown::render("predict_risk.Rmd", output_format = "md_document")
