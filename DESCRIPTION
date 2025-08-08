@@ -7,16 +7,16 @@ Maintainer: GEMINIdata <Gemini.data@unityhealth.to>
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports:
-	data.table (== 1.17.2),
-	dplyr (== 1.1.4),
-	prodlim (== 2024.06.25),
-	riskRegression (== 2023.12.21),
-	rms (== 6.8-2),
-	truncnorm (== 1.0-9)
+	data.table,
+	dplyr,
+	prodlim,
+	riskRegression,
+	rms,
+	truncnorm
 Suggests: 
-	geepack (== 1.3.11),
-	ggplot2 (== 3.5.2),
-	tableone (== 0.13.2),
+	geepack,
+	ggplot2,
+	tableone,
 	knitr,
 	rmarkdown
 	
