@@ -1,3 +1,21 @@
+-   [Overview](#overview)
+-   [Set-up](#set-up)
+-   [Fine-Gray Regression (FGR)
+    Model](#fine-gray-regression--fgr--model)
+-   [Generating predictions on new
+    data](#generating-predictions-on-new-data) - [Outcomes](#outcomes) -
+    [Predictors](#predictors)
+-   [Evaluating model performance](#evaluating-model-performance)
+    -   [Data pre-processing](#data-pre-processing)
+    -   [Performance metrics](#performance-metrics)
+        -   [AUROC](#auroc)
+        -   [Calibration](#calibration)
+            -   [Calibration metrics](#calibration-metrics)
+-   [Session Info](#session-info)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table
+of contents generated with markdown-toc</a></i></small>
+
 # Overview
 
 This file contains R code illustrating how to:
