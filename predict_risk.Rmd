@@ -436,7 +436,7 @@ print(paste("E50 = ", round(E50, 3)))
 print(paste("E90 = ", round(E90, 3)))
 ```
 
-# Session Info {#session-info}
+# Session Info
 
 ```{r}
 print(sessionInfo())
