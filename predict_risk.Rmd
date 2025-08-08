@@ -5,8 +5,8 @@ output:
   github_document:
     toc: true
     toc_depth: 3
-  keep_text: true
-  pandoc_args: --webtex
+  keep_md: true
+  pandoc_args: ["--webtex"]
 ---
 
 # Overview
