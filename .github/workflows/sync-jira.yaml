@@ -21,3 +21,8 @@ jobs:
           issuetype: Task     # or Bug/Story etc.
           summary: "${{ github.event.issue.title }}"
           description: "${{ github.event.issue.body }}"
+	  team: Data Innovation
+	  fields: >-
+            {
+              "parent": { "key": "GDT-160" } # Rgemini EPIC
+            }
