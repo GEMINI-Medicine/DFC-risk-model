@@ -748,9 +748,9 @@ difference between predicted vs. observed risk scores:
 
     print(sessionInfo())
 
-    ## R version 4.5.1 (2025-06-13)
+    ## R version 4.5.2 (2025-10-31)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.2 LTS
+    ## Running under: Ubuntu 24.04.3 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -769,40 +769,40 @@ difference between predicted vs. observed risk scores:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] tableone_0.13.2           rms_8.0-0                
-    ## [3] Hmisc_5.2-3               riskRegression_2023.12.21
-    ## [5] prodlim_2025.04.28        ggplot2_3.5.2            
-    ## [7] geepack_1.3.12            dplyr_1.1.4              
+    ## [1] tableone_0.13.2           rms_8.1-0                
+    ## [3] Hmisc_5.2-4               riskRegression_2023.12.21
+    ## [5] prodlim_2025.04.28        ggplot2_4.0.1            
+    ## [7] geepack_1.3.13            dplyr_1.1.4              
     ## [9] data.table_1.17.8        
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.2.1    farver_2.1.2        fastmap_1.2.0      
-    ##  [4] TH.data_1.1-3       labelled_2.14.1     digest_0.6.37      
-    ##  [7] rpart_4.1.24        lifecycle_1.0.4     cluster_2.1.8.1    
-    ## [10] survival_3.8-3      magrittr_2.0.3      compiler_4.5.1     
-    ## [13] rlang_1.1.6         tools_4.5.1         plotrix_3.8-4      
-    ## [16] yaml_2.3.10         knitr_1.50          labeling_0.4.3     
-    ## [19] timereg_2.0.6       htmlwidgets_1.6.4   RColorBrewer_1.1-3 
-    ## [22] KernSmooth_2.23-26  multcomp_1.4-28     polspline_1.1.25   
-    ## [25] withr_3.0.2         foreign_0.8-90      purrr_1.1.0        
-    ## [28] numDeriv_2016.8-1.1 nnet_7.3-20         grid_4.5.1         
-    ## [31] mets_1.3.6          e1071_1.7-16        colorspace_2.1-1   
-    ## [34] future_1.67.0       globals_0.18.0      scales_1.4.0       
-    ## [37] iterators_1.0.14    MASS_7.3-65         cli_3.6.5          
-    ## [40] mvtnorm_1.3-3       survey_4.4-2        rmarkdown_2.29     
-    ## [43] generics_0.1.4      rstudioapi_0.17.1   future.apply_1.20.0
-    ## [46] proxy_0.4-27        DBI_1.2.3           stringr_1.5.1      
-    ## [49] splines_4.5.1       parallel_4.5.1      base64enc_0.1-3    
-    ## [52] mitools_2.4         vctrs_0.6.5         Matrix_1.7-3       
-    ## [55] sandwich_3.1-1      SparseM_1.84-2      hms_1.1.3          
-    ## [58] Formula_1.2-5       htmlTable_2.4.3     listenv_0.9.1      
-    ## [61] foreach_1.5.2       tidyr_1.3.1         cmprsk_2.2-12      
-    ## [64] glue_1.8.0          parallelly_1.45.1   codetools_0.2-20   
-    ## [67] stringi_1.8.7       gtable_0.3.6        tibble_3.3.0       
-    ## [70] pillar_1.11.0       htmltools_0.5.8.1   quantreg_6.1       
-    ## [73] lava_1.8.1          R6_2.6.1            evaluate_1.0.4     
-    ## [76] lattice_0.22-7      haven_2.5.5         backports_1.5.0    
-    ## [79] broom_1.0.9         class_7.3-23        MatrixModels_0.5-4 
-    ## [82] Rcpp_1.1.0          gridExtra_2.3       nlme_3.1-168       
-    ## [85] checkmate_2.3.2     xfun_0.52           forcats_1.0.0      
-    ## [88] zoo_1.8-14          pkgconfig_2.0.3
+    ##  [1] tidyselect_1.2.1    farver_2.1.2        S7_0.2.1           
+    ##  [4] fastmap_1.2.0       TH.data_1.1-5       labelled_2.16.0    
+    ##  [7] digest_0.6.39       rpart_4.1.24        lifecycle_1.0.4    
+    ## [10] cluster_2.1.8.1     survival_3.8-3      magrittr_2.0.4     
+    ## [13] compiler_4.5.2      rlang_1.1.6         tools_4.5.2        
+    ## [16] plotrix_3.8-13      yaml_2.3.10         knitr_1.50         
+    ## [19] labeling_0.4.3      timereg_2.0.7       htmlwidgets_1.6.4  
+    ## [22] RColorBrewer_1.1-3  KernSmooth_2.23-26  multcomp_1.4-29    
+    ## [25] polspline_1.1.25    withr_3.0.2         foreign_0.8-90     
+    ## [28] purrr_1.2.0         numDeriv_2016.8-1.1 nnet_7.3-20        
+    ## [31] grid_4.5.2          mets_1.3.8          e1071_1.7-16       
+    ## [34] colorspace_2.1-2    future_1.68.0       globals_0.18.0     
+    ## [37] scales_1.4.0        iterators_1.0.14    MASS_7.3-65        
+    ## [40] cli_3.6.5           mvtnorm_1.3-3       survey_4.4-8       
+    ## [43] rmarkdown_2.30      generics_0.1.4      rstudioapi_0.17.1  
+    ## [46] future.apply_1.20.0 proxy_0.4-27        DBI_1.2.3          
+    ## [49] stringr_1.6.0       splines_4.5.2       parallel_4.5.2     
+    ## [52] mitools_2.4         base64enc_0.1-3     vctrs_0.6.5        
+    ## [55] Matrix_1.7-4        sandwich_3.1-1      SparseM_1.84-2     
+    ## [58] hms_1.1.4           Formula_1.2-5       htmlTable_2.4.3    
+    ## [61] listenv_0.10.0      foreach_1.5.2       tidyr_1.3.1        
+    ## [64] cmprsk_2.2-12       glue_1.8.0          parallelly_1.45.1  
+    ## [67] codetools_0.2-20    stringi_1.8.7       gtable_0.3.6       
+    ## [70] tibble_3.3.0        pillar_1.11.1       htmltools_0.5.8.1  
+    ## [73] quantreg_6.1        lava_1.8.2          R6_2.6.1           
+    ## [76] evaluate_1.0.5      lattice_0.22-7      haven_2.5.5        
+    ## [79] backports_1.5.0     broom_1.0.10        class_7.3-23       
+    ## [82] MatrixModels_0.5-4  Rcpp_1.1.0          gridExtra_2.3      
+    ## [85] nlme_3.1-168        checkmate_2.3.3     xfun_0.54          
+    ## [88] forcats_1.0.1       zoo_1.8-14          pkgconfig_2.0.3
