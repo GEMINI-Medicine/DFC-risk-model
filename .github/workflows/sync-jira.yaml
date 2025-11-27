@@ -23,6 +23,6 @@ jobs:
           description: "${{ github.event.issue.body }}"
           fields: >-
             {
-              "team": "Data Innovation"
+              "team": "Data Innovation",
               "parent": { "key": "GDT-160" } # Rgemini EPIC
             }
