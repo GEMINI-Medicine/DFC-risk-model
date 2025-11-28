@@ -781,7 +781,7 @@ difference between predicted vs. observed risk scores:
     ##  [7] digest_0.6.39       rpart_4.1.24        lifecycle_1.0.4    
     ## [10] cluster_2.1.8.1     survival_3.8-3      magrittr_2.0.4     
     ## [13] compiler_4.5.2      rlang_1.1.6         tools_4.5.2        
-    ## [16] plotrix_3.8-13      yaml_2.3.10         knitr_1.50         
+    ## [16] plotrix_3.8-13      yaml_2.3.11         knitr_1.50         
     ## [19] labeling_0.4.3      timereg_2.0.7       htmlwidgets_1.6.4  
     ## [22] RColorBrewer_1.1-3  KernSmooth_2.23-26  multcomp_1.4-29    
     ## [25] polspline_1.1.25    withr_3.0.2         foreign_0.8-90     
