@@ -1,7 +1,7 @@
-name: Create Jira issue when GitHub issue is opened
+name: Jira Integration
 on:
   issues:
-    types: [opened]
+    types: [opened, labeled]
 
 jobs:
   create_jira_issue:
@@ -20,9 +20,5 @@ jobs:
           project: GDT        # your Jira project key
           issuetype: Task     # or Bug/Story etc.
           summary: "${{ github.event.issue.title }}"
-          description: "${{ github.event.issue.body }}"
-          fields: >-
-            {
-              "team": "Data Innovation",
-              "parent": { "key": "GDT-160" } # Rgemini EPIC
-            }
+          description: "This task was automatically created from an issue in GitHub ${{ github.event.issue.html_url }} ${{ github.event.issue.body }}"
+          fields: '{"labels": ["github-import"]}'
