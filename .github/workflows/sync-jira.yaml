@@ -21,4 +21,4 @@ jobs:
           issuetype: Task     # or Bug/Story etc.
           summary: "${{ github.event.issue.title }}"
           description: "This task was automatically created from an issue in GitHub ${{ github.event.issue.html_url }} ${{ github.event.issue.body }}"
-          fields: '{"labels": ["github-import"]}'
+          fields: '{"labels": ["rgemini-github-import"], "parent": ["GDT-160"] }'
