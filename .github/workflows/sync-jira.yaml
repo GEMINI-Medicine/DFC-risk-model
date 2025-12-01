@@ -24,5 +24,6 @@ jobs:
           fields: '{
             "labels": ["rgemini-github-import"], # this should be specific to the repo
             "parent": { "key": "GDT-160" }, # link to Rgemini Epic (this should be specific to the repo)
-            "assignee": { "id": "1d1f41de-6740-4eb3-b6f9-8289c07396eb" } # automatically assign to specific user (repo-specific)
+            "assignee": { "id": "1d1f41de-6740-4eb3-b6f9-8289c07396eb" }, # automatically assign to specific user (repo-specific)
+            "customfield_10001": { "id": "cbae40bd-ed0f-4a8d-af61-df4dcd9cb103" }  # Team field = Data Innovation
           }'
