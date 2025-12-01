@@ -44,6 +44,7 @@ jobs:
       - name: Commit and push knitted file
         if: github.ref == 'refs/heads/main'
         run: |
+          git diff --quiet && exit 0
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add predict_risk.md figs/
