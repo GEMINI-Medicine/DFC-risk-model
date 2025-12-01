@@ -1,7 +1,7 @@
 name: Jira Integration
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, reopened]
 
 jobs:
   create_jira_issue:
@@ -24,6 +24,5 @@ jobs:
           fields: '{
             "labels": ["rgemini-github-import"],
             "parent": { "key": "GDT-160" },
-            "assignee": { "id": "1d1f41de-6740-4eb3-b6f9-8289c07396eb" },
-            "customfield_10001": { "id": "cbae40bd-ed0f-4a8d-af61-df4dcd9cb103" }
+            "assignee": { "id": "1d1f41de-6740-4eb3-b6f9-8289c07396eb" }
           }'
