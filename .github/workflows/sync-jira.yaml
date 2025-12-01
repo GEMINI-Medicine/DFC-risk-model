@@ -22,8 +22,8 @@ jobs:
           summary: "${{ github.event.issue.title }}"
           description: "This task was automatically created from an issue in GitHub ${{ github.event.issue.html_url }} ${{ github.event.issue.body }}"
           fields: '{
-            "labels": ["rgemini-github-import"],
-            "parent": { "key": "GDT-160" },
+            "labels": ["dfc-model-github-import"],
+            "parent": { "key": "GDT-230" },
             "assignee": { "id": "712020:21997000-8dde-4287-ae0a-3b2a0570bef7" },
             "customfield_10001": "cbae40bd-ed0f-4a8d-af61-df4dcd9cb103"
-          }'
+          }' # note that everything listed under 'fields' is repo-specific
