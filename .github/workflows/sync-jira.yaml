@@ -25,5 +25,5 @@ jobs:
             "labels": ["rgemini-github-import"],
             "parent": { "key": "GDT-160" },
             "assignee": { "id": "712020:21997000-8dde-4287-ae0a-3b2a0570bef7" },
-            "customfield_10001": { "id": "cbae40bd-ed0f-4a8d-af61-df4dcd9cb103" }
+            "customfield_10001": { "id": "1ef255f6-c001-4888-931e-cf1e28c59177" }
           }'
